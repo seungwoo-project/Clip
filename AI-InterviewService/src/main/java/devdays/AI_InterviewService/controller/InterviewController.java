@@ -3,11 +3,10 @@ package devdays.AI_InterviewService.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 //@ResponseBody
-public class LoginController {
+public class InterviewController {
 
     @GetMapping("/")
     public String login_form() {
@@ -17,6 +16,12 @@ public class LoginController {
 
     @PostMapping("/list")
     public String login() {
+
+        return "basic/list";
+    }
+
+    @GetMapping("/list")
+    public String listAll() {
 //        List<File> files = fileRepository.findByUserId(userId);
 //        model.addAttribute("files", files);
         return "basic/list";
@@ -37,6 +42,25 @@ public class LoginController {
     @PostMapping("/upload")
     public String upload() {
 
+        return "redirect:/list";
+    }
+
+    @GetMapping("/{coverLetter}")
+    public String coverLetter() {
+
         return "ok";
     }
+
+    @GetMapping("/{coverLetter}/delete")
+    public String coverLetterDelete() {
+
+        return "ok";
+    }
+
+    @GetMapping("/{coverLetter}/execute")
+    public String coverLetterExecute() {
+
+        return "ok";
+    }
+
 }
