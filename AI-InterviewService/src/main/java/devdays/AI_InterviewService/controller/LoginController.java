@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class LoginController {
 
     @GetMapping("/")
-    public String 로그인폼() {
+    public String login_form() {
 
         return "basic/login";
     }
@@ -22,8 +22,14 @@ public class LoginController {
     }
 
     @GetMapping("/register")
-    public String register() {
+    public String register_form() {
 
         return "basic/register";
+    }
+
+    @PostMapping("/register")
+    public String register() {
+
+        return "redirect:/";
     }
 }
