@@ -15,9 +15,10 @@ public class LoginController {
         return "basic/login";
     }
 
-    @PostMapping("/")
+    @PostMapping("/list")
     public String login() {
-
+//        List<File> files = fileRepository.findByUserId(userId);
+//        model.addAttribute("files", files);
         return "basic/list";
     }
 
@@ -31,5 +32,11 @@ public class LoginController {
     public String register() {
 
         return "redirect:/";
+    }
+
+    @PostMapping("/upload")
+    public String upload() {
+
+        return "ok";
     }
 }

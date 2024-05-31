@@ -8,11 +8,10 @@
     <meta name="description" content="">
     <meta name="author" content="Mark Otto, Jacob Thornton, 그리고 Bootstrap 기여자들">
     <meta name="generator" content="Hugo 0.122.0">
+
     <title>자소서 목록</title>
 
     <link rel="canonical" href="https://getbootstrap.kr/docs/5.3/examples/album/">
-
-
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3">
 
     <!--    부트스트랩 스타일시트-->
@@ -20,7 +19,6 @@
           integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 
     <style>
-
         @media (min-width: 768px) {
             .bd-placeholder-img-lg {
                 font-size: 3.5rem;
@@ -41,8 +39,8 @@
         .bd-mode-toggle .dropdown-menu .active .bi {
             display: block !important;
         }
-    </style>
 
+    </style>
 
 </head>
 <body>
@@ -54,10 +52,16 @@
             <div class="col-lg-6 col-md-8 mx-auto">
                 <h1 class="fw-light">자소서 목록</h1>
                 <p class="lead text-body-secondary">AI 면접을 보고싶은 자소서를 선택하세요.</p>
-                <p>
-                    <a href="#" class="btn btn-success my-2">등록하기</a>
-                    <a href="login.html" class="btn btn-secondary my-2">로그아웃</a>
-                </p>
+<!--                자소서 파일 처리-->
+                <div style="display: inline-block;">
+                    <form id="fileForm" method="post" enctype="multipart/form-data" action="/upload" th:action="@{/upload}">
+                        <input type="file" name="file" id="file" style="display: none;" onchange="submitForm()">
+                        <button type="button" class="btn btn-success my-2" onclick="openFileDialog()">등록하기</button>
+                    </form>
+                </div>
+<!--                -->
+                <a href="login.html" th:href="@{/}" class="btn btn-secondary my-2">로그아웃</a>
+                </input>
             </div>
         </div>
     </section>
@@ -88,6 +92,30 @@
                         </button>
                     </div>
                 </div>
+
+
+                <div class="col" th:each="coverLetter : ${coverLetters}">
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <p class="card-text" th:text="${coverLetter.name}">자소서 이름</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-sm btn-outline-secondary"
+                                            onclick="location.href='상세조회.html'" th:onclick="|location.href='@{/{coverLetterId}(coverLetterId = ${coverLetter.id})}'|">조회
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary"
+                                            th:onclick="|location.href='@{/{coverLetterId}/delete}(coverLetterId = ${coverLetter.id})'|">삭제
+                                    </button>
+                                </div>
+                                <small class="text-body-secondary" th:text="${#temporals.format(coverLetter.uploadDate, 'yyyy-MM-dd HH:mm')}"></small>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-md btn-outline-secondary"
+                                th:onclick="|location.href='@{/{coverLetterId}/excute}(coverLetterId = ${coverLetter.id})'|">면접보기
+                        </button>
+                    </div>
+                </div>
+
 
 
                 <div class="col">
@@ -195,6 +223,16 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
+
+<script>
+    function openFileDialog() {
+        document.getElementById('file').click();
+    }
+
+    function submitForm() {
+        document.getElementById('fileForm').submit();
+    }
+</script>
 
 </body>
 </html>
