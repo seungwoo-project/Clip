@@ -33,6 +33,9 @@ API : chat gpt API, openCV - 얼굴인식, TTS
 <hr>
 <h3>다이어그램 설계</h3>
 
-![image](https://github.com/seungwoo-project/Self-introduction-based-virtual-interview-system-project/assets/112483124/de5b6cda-36b4-4993-b1a5-6c682ce0de99)
+![스크린샷 2024-05-31 오후 6 10 41](https://github.com/seungwoo-project/AI-Interview-Coach/assets/112483124/4f8d711a-bb7f-42de-a99f-fd75cd21cf3a)
 
-![image](https://github.com/seungwoo-project/Self-introduction-based-virtual-interview-system-project/assets/112483124/2fc64755-00c8-4908-98f8-970a11093b46)
+![스크린샷 2024-05-31 오후 6 11 02](https://github.com/seungwoo-project/AI-Interview-Coach/assets/112483124/12de6324-8045-4882-b681-727b8c93a34a)
+
+
+
