@@ -10,12 +10,8 @@ CREATE TABLE coverletters (
     userId VARCHAR(255),
     title VARCHAR(255) NOT NULL,
     uploadDate Date,
-<<<<<<< HEAD
     content VARCHAR(255) NOT NULL,
     PRIMARY KEY (coverLetterId)
-);
-=======
-    content VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE questions (
@@ -23,4 +19,3 @@ CREATE TABLE questions (
     user_id VARCHAR(255),
     ques VARCHAR(MAX)
 );
->>>>>>> 68476b2780477de115886d7b28d5769db1999599
