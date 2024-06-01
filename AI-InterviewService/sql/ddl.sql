@@ -12,7 +12,7 @@ CREATE TABLE coverletters (
     userId VARCHAR(255),
     title VARCHAR(255) NOT NULL,
     uploadDate Date,
-    content VARCHAR(255) NOT NULL,
+    content TEXT NOT NULL,
     PRIMARY KEY (coverLetterId)
 );
 

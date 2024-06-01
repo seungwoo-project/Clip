@@ -33,4 +33,8 @@ public class CoverLetterServiceImpl implements CoverLetterService{
         return coverLetterRepository.findByUserId(userId);
     }
 
+    public CoverLetter findByCoverLetterId(Long coverLetterId) {
+        return coverLetterRepository.findByCoverLetterId(coverLetterId);
+    }
+
 }

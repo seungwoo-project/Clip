@@ -9,4 +9,6 @@ public interface CoverLetterService {
     List<CoverLetter> findByUserId(String userId);
 
     void saveCoverLetter(String userId, String title, String content);
+
+    CoverLetter findByCoverLetterId(Long coverLetterId);
 }

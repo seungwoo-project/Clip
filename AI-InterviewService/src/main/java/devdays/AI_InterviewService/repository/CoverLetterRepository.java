@@ -10,4 +10,6 @@ import java.util.List;
 @Repository
 public interface CoverLetterRepository extends JpaRepository<CoverLetter, Long> {
     List<CoverLetter> findByUserId(String userId);
+
+    CoverLetter findByCoverLetterId(Long coverLetterId);
 }
