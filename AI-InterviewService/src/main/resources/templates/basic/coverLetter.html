@@ -49,10 +49,8 @@
         <h2 style="text-align: center;" th:text="${coverLetter.title}">자소서 제목</h2>
         <pre th:utext="${coverLetter.content}">자소서 내용</pre>
         <div class="button-container">
-            <!-- <button class="button button-list">목록으로</button>
-            <button class="button button-interview">면접보기</button> -->
             <button class="btn btn-secondary my-2" onclick="location.href='list.html'" th:onclick="|location.href='@{/list}'|">목록으로</button>
-            <button class="btn btn-success my-2" onclick="location.href='gptlist.html'">면접보기</button>
+            <button class="btn btn-success my-2" onclick="location.href='gptlist.html'" th:onclick="|location.href='@{/list/{coverLetterId}/excute(coverLetterId = ${coverLetter.coverLetterId})}'|">면접보기</button>
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>

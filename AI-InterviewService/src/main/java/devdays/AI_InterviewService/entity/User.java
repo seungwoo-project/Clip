@@ -11,5 +11,4 @@ public class User {
     private String userId;
     private String password;
 
-    // 생성자, equals, hashCode 등 필요한 메서드
 }
