@@ -44,7 +44,11 @@ public class InterviewController {
 
         return "redirect:/list";
     }
+<<<<<<< HEAD
 
+=======
+//
+>>>>>>> 9f3a416052248279ab21160b22c96fa4dc2a710f
 //    @GetMapping("/{coverLetter}")
 //    public String coverLetter() {
 //
