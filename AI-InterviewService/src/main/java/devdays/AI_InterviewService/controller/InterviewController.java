@@ -28,9 +28,9 @@ public class InterviewController {
 
 
     @GetMapping("/")
-    public String login_form() {
-
-        return "basic/login";
+    public String login_form(HttpSession session) {
+        if(session.getAttribute("userId") == null) return "basic/login";
+        else return "redirect:/list";
     }
 
     @GetMapping("/logout")
@@ -49,7 +49,7 @@ public class InterviewController {
                 session.setAttribute("userId", userId); // 세션에 사용자 아이디 저장
                 return "redirect:/list";
             } else {
-                model.addAttribute("message", "로그인에 실패하였습니다.");
+                model.addAttribute("errorMessage", "아이디 또는 비밀번호를 잘못 입력했습니다.");
                 return "basic/login";
             }
         } else {
@@ -77,10 +77,8 @@ public class InterviewController {
     public String list(Model model, HttpSession session) {
         String userId = (String) session.getAttribute("userId");
 
-        if (userId != null) {
-            List<CoverLetter> coverLetters = coverLetterService.findByUserId(userId);
-            model.addAttribute("coverLetters", coverLetters);
-        }
+        List<CoverLetter> coverLetters = coverLetterService.findByUserId(userId);
+        model.addAttribute("coverLetters", coverLetters);
 
         return "basic/list";
     }
