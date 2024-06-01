@@ -21,12 +21,10 @@ public class InterviewController {
 
     private final UserService userService;
     private final CoverLetterService coverLetterService;
-    private final CoverLetterRepository coverLetterRepository;
     @Autowired
     public InterviewController(UserService userService, CoverLetterService coverLetterService, CoverLetterRepository coverLetterRepository) {
         this.userService = userService;
         this.coverLetterService = coverLetterService;
-        this.coverLetterRepository = coverLetterRepository;
     }
 
 
