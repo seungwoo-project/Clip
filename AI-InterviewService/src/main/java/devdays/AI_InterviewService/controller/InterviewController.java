@@ -2,8 +2,10 @@ package devdays.AI_InterviewService.controller;
 
 import devdays.AI_InterviewService.entity.User;
 import devdays.AI_InterviewService.service.UserService;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,12 +30,15 @@ public class InterviewController {
     }
 
     @PostMapping("/list")
-    public String login(@RequestParam String userId, @RequestParam String password) {
+    public String login(@RequestParam String userId, @RequestParam String password, Model model, HttpServletResponse response) {
         boolean loginSuccess = userService.login(userId, password);
 
         if (loginSuccess) {
-            return "basic/list";
+            model.addAttribute("message", "로그인이 성공하였습니다.");
+            return "redirect:/list";
         } else {
+            model.addAttribute("message", "로그인에 실패하였습니다.");
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return "basic/login";
         }
     }
