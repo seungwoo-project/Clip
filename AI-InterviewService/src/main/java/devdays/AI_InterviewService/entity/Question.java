@@ -1,0 +1,18 @@
+package devdays.AI_InterviewService.entity;
+
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+
+@Entity @Getter @Setter
+public class Question {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "userId")
+    private String userId;
+
+    @Column(name = "ques")
+    private String question;
+}
