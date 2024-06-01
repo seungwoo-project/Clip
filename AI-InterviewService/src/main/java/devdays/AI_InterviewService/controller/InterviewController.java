@@ -90,7 +90,8 @@ public class InterviewController {
         String userId = (String) session.getAttribute("userId");
 
         if (userId != null) {
-            String title = file.getOriginalFilename();
+            String originalFilename = file.getOriginalFilename();
+            String title = originalFilename.substring(0, originalFilename.lastIndexOf('.'));
             String content = new String(file.getBytes(), "UTF-8");
             coverLetterService.saveCoverLetter(userId, title, content);
         }
