@@ -1,12 +1,25 @@
 package devdays.AI_InterviewService.controller;
 
+import devdays.AI_InterviewService.entity.User;
+import devdays.AI_InterviewService.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 //@ResponseBody
 public class InterviewController {
+
+    private final UserService userService;
+
+    @Autowired
+    public InterviewController(UserService userService) {
+        this.userService = userService;
+    }
+
 
     @GetMapping("/")
     public String login_form() {
@@ -15,9 +28,14 @@ public class InterviewController {
     }
 
     @PostMapping("/list")
-    public String login() {
+    public String login(@RequestParam String userId, @RequestParam String password) {
+        boolean loginSuccess = userService.login(userId, password);
 
-        return "basic/list";
+        if (loginSuccess) {
+            return "basic/list";
+        } else {
+            return "basic/login";
+        }
     }
 
     @GetMapping("/list")
@@ -34,9 +52,13 @@ public class InterviewController {
     }
 
     @PostMapping("/register")
-    public String register() {
-
-        return "redirect:/";
+    public String register(@ModelAttribute User user) {
+        try {
+            userService.signup(user);
+            return "redirect:/";
+        } catch (IllegalArgumentException e) {
+            return "basic/register";
+        }
     }
 
     @PostMapping("/upload")
@@ -44,11 +66,7 @@ public class InterviewController {
 
         return "redirect:/list";
     }
-<<<<<<< HEAD
 
-=======
-//
->>>>>>> 9f3a416052248279ab21160b22c96fa4dc2a710f
 //    @GetMapping("/{coverLetter}")
 //    public String coverLetter() {
 //
