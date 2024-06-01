@@ -4,15 +4,11 @@ import devdays.AI_InterviewService.entity.CoverLetter;
 import devdays.AI_InterviewService.entity.User;
 import devdays.AI_InterviewService.service.CoverLetterService;
 import devdays.AI_InterviewService.service.UserService;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -92,19 +88,21 @@ public class InterviewController {
 
         if (userId != null) {
             String title = file.getOriginalFilename();
-            String content = new String(file.getBytes());
+            String content = new String(file.getBytes(), "UTF-8");
             coverLetterService.saveCoverLetter(userId, title, content);
         }
 
         return "redirect:/list";
     }
 
-//    @GetMapping("/{coverLetter}")
-//    public String coverLetter() {
-//
-//        return "ok";
-//    }
-//
+    @GetMapping("/{coverLetterId}")
+    public String coverLetterItem(@PathVariable Long coverLetterId, Model model) {
+        CoverLetter coverLetterItem = coverLetterService.findByCoverLetterId(coverLetterId);
+        model.addAttribute("coverLetter", coverLetterItem);
+
+        return "basic/coverLetter";
+    }
+
 //    @GetMapping("/{coverLetter}/delete")
 //    public String coverLetterDelete() {
 //

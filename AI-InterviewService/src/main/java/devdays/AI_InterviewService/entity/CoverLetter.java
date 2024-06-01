@@ -23,6 +23,7 @@ public class CoverLetter {
     @Temporal(TemporalType.DATE)
     private Date uploadDate;
 
+    @Lob
     @Column(name = "content", nullable = false)
     private String content;
 
