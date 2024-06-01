@@ -10,8 +10,8 @@ import java.util.Date;
 @Table(name = "coverletters")
 public class CoverLetter {
     @Id
-    @Column(name = "coverLetterId")
-    private String coverLetterId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long coverLetterId;
 
     @ManyToOne
     @JoinColumn(name = "userId", referencedColumnName = "userId")
