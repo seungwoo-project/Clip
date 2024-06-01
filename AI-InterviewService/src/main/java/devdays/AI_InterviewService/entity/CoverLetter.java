@@ -13,9 +13,8 @@ public class CoverLetter {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long coverLetterId;
 
-    @ManyToOne
-    @JoinColumn(name = "userId", referencedColumnName = "userId")
-    private User user;
+    @Column(name = "userId")
+    private String userId;
 
     @Column(name = "title", nullable = false)
     private String title;
@@ -27,7 +26,4 @@ public class CoverLetter {
     @Column(name = "content", nullable = false)
     private String content;
 
-    // Getters and Setters
-
-    // 생성자, equals, hashCode 등 필요한 메서드
 }

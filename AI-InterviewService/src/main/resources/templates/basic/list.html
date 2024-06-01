@@ -60,7 +60,7 @@
                     </form>
                 </div>
 <!--                -->
-                <a href="login.html" th:href="@{/}" class="btn btn-secondary my-2">로그아웃</a>
+                <a href="login.html" th:href="@{/logout}" class="btn btn-secondary my-2">로그아웃</a>
                 </input>
             </div>
         </div>
@@ -70,34 +70,11 @@
         <div class="container">
 
             <div class="row row-cols-2 row-cols-sm-2 row-cols-md-1 g-2">
-                <div class="col">
-                    <div class="card shadow-sm">
-                        <!-- <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg> -->
-                        <div class="card-body">
-                            <p class="card-text">삼성.pdf</p>
-                            <div class="d-flex justify-content-between align-items-center">
-
-                                <div class="btn-group">
-                                    <button type="button" class="btn btn-sm btn-outline-secondary"
-                                            onclick="location.href='상세조회.html'">조회
-                                    </button>
-                                    <button type="button" class="btn btn-sm btn-outline-secondary">삭제</button>
-                                </div>
-
-                                <small class="text-body-secondary">9 mins</small>
-                            </div>
-                        </div>
-                        <button type="button" class="btn btn-md btn-outline-secondary"
-                                onclick="location.href='gptlist.html'">면접보기
-                        </button>
-                    </div>
-                </div>
-
 
                 <div class="col" th:each="coverLetter : ${coverLetters}">
                     <div class="card shadow-sm">
                         <div class="card-body">
-                            <p class="card-text" th:text="${coverLetter.name}">자소서 이름</p>
+                            <p class="card-text" th:text="${coverLetter.title}">자소서 이름</p>
                             <div class="d-flex justify-content-between align-items-center">
                                 <div class="btn-group">
                                     <button type="button" class="btn btn-sm btn-outline-secondary"
@@ -107,90 +84,12 @@
                                             th:onclick="|location.href='@{/{coverLetterId}/delete}(coverLetterId = ${coverLetter.id})'|">삭제
                                     </button>
                                 </div>
-                                <small class="text-body-secondary" th:text="${#temporals.format(coverLetter.uploadDate, 'yyyy-MM-dd HH:mm')}"></small>
+                                <small class="text-body-secondary" th:text="${#dates.format(coverLetter.uploadDate, 'yyyy-MM-dd')}"></small>
                             </div>
                         </div>
                         <button type="button" class="btn btn-md btn-outline-secondary"
                                 th:onclick="|location.href='@{/{coverLetterId}/excute}(coverLetterId = ${coverLetter.id})'|">면접보기
                         </button>
-                    </div>
-                </div>
-
-
-
-                <div class="col">
-                    <div class="card shadow-sm">
-                        <!-- <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg> -->
-                        <div class="card-body">
-                            <p class="card-text">삼성.pdf</p>
-                            <div class="d-flex justify-content-between align-items-center">
-
-                                <div class="btn-group">
-                                    <button type="button" class="btn btn-sm btn-outline-secondary">조회</button>
-                                    <button type="button" class="btn btn-sm btn-outline-secondary">삭제</button>
-                                </div>
-
-                                <small class="text-body-secondary">9 mins</small>
-                            </div>
-                        </div>
-                        <button type="button" class="btn btn-md btn-outline-secondary">면접보기</button>
-                    </div>
-                </div>
-
-                <div class="col">
-                    <div class="card shadow-sm">
-                        <!-- <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg> -->
-                        <div class="card-body">
-                            <p class="card-text">삼성.pdf</p>
-                            <div class="d-flex justify-content-between align-items-center">
-
-                                <div class="btn-group">
-                                    <button type="button" class="btn btn-sm btn-outline-secondary">조회</button>
-                                    <button type="button" class="btn btn-sm btn-outline-secondary">삭제</button>
-                                </div>
-
-                                <small class="text-body-secondary">9 mins</small>
-                            </div>
-                        </div>
-                        <button type="button" class="btn btn-md btn-outline-secondary">면접보기</button>
-                    </div>
-                </div>
-
-                <div class="col">
-                    <div class="card shadow-sm">
-                        <!-- <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg> -->
-                        <div class="card-body">
-                            <p class="card-text">삼성.pdf</p>
-                            <div class="d-flex justify-content-between align-items-center">
-
-                                <div class="btn-group">
-                                    <button type="button" class="btn btn-sm btn-outline-secondary">조회</button>
-                                    <button type="button" class="btn btn-sm btn-outline-secondary">삭제</button>
-                                </div>
-
-                                <small class="text-body-secondary">9 mins</small>
-                            </div>
-                        </div>
-                        <button type="button" class="btn btn-md btn-outline-secondary">면접보기</button>
-                    </div>
-                </div>
-
-                <div class="col">
-                    <div class="card shadow-sm">
-                        <!-- <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg> -->
-                        <div class="card-body">
-                            <p class="card-text">삼성.pdf</p>
-                            <div class="d-flex justify-content-between align-items-center">
-
-                                <div class="btn-group">
-                                    <button type="button" class="btn btn-sm btn-outline-secondary">조회</button>
-                                    <button type="button" class="btn btn-sm btn-outline-secondary">삭제</button>
-                                </div>
-
-                                <small class="text-body-secondary">9 mins</small>
-                            </div>
-                        </div>
-                        <button type="button" class="btn btn-md btn-outline-secondary">면접보기</button>
                     </div>
                 </div>
 
