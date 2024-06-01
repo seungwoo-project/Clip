@@ -1,8 +1,10 @@
 package devdays.AI_InterviewService.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
-@Entity
+@Entity @Getter @Setter
 @Table(name = "users")
 public class User {
     @Id
@@ -11,22 +13,6 @@ public class User {
 
     @Column(name = "password", nullable = false)
     private String password;
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
 
     // 생성자, equals, hashCode 등 필요한 메서드
 }
