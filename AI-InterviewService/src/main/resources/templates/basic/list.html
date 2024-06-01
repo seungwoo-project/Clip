@@ -54,7 +54,7 @@
                 <p class="lead text-body-secondary">AI 면접을 보고싶은 자소서를 선택하세요.</p>
 <!--                자소서 파일 처리-->
                 <div style="display: inline-block;">
-                    <form id="fileForm" method="post" enctype="multipart/form-data" action="/upload" th:action="@{/upload}">
+                    <form id="fileForm" method="post" enctype="multipart/form-data"  action="/upload" th:action="@{/upload}">
                         <input type="file" name="coverLetter" id="file" style="display: none;" onchange="submitForm()">
                         <button type="button" class="btn btn-success my-2" onclick="openFileDialog()">등록하기</button>
                     </form>
