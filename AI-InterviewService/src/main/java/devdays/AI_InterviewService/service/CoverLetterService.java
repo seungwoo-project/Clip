@@ -11,4 +11,5 @@ public interface CoverLetterService {
     void saveCoverLetter(String userId, String title, String content);
 
     CoverLetter findByCoverLetterId(Long coverLetterId);
+    void deleteCoverLetter(Long coverLetterId);
 }

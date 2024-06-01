@@ -20,6 +20,7 @@ public class CoverLetterServiceImpl implements CoverLetterService{
         this.coverLetterRepository = coverLetterRepository;
     }
 
+    @Override
     public void saveCoverLetter(String userId, String title, String content) {
         CoverLetter coverLetter = new CoverLetter();
         coverLetter.setUserId(userId);
@@ -29,12 +30,18 @@ public class CoverLetterServiceImpl implements CoverLetterService{
         coverLetterRepository.save(coverLetter);
     }
 
+    @Override
     public List<CoverLetter> findByUserId(String userId) {
         return coverLetterRepository.findByUserId(userId);
     }
 
+    @Override
     public CoverLetter findByCoverLetterId(Long coverLetterId) {
         return coverLetterRepository.findByCoverLetterId(coverLetterId);
     }
 
+    @Override
+    public void deleteCoverLetter(Long coverLetterId) {
+        coverLetterRepository.deleteById(coverLetterId);
+    }
 }

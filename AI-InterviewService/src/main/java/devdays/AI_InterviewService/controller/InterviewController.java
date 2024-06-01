@@ -2,6 +2,7 @@ package devdays.AI_InterviewService.controller;
 
 import devdays.AI_InterviewService.entity.CoverLetter;
 import devdays.AI_InterviewService.entity.User;
+import devdays.AI_InterviewService.repository.CoverLetterRepository;
 import devdays.AI_InterviewService.service.CoverLetterService;
 import devdays.AI_InterviewService.service.UserService;
 import jakarta.servlet.http.HttpSession;
@@ -20,10 +21,12 @@ public class InterviewController {
 
     private final UserService userService;
     private final CoverLetterService coverLetterService;
+    private final CoverLetterRepository coverLetterRepository;
     @Autowired
-    public InterviewController(UserService userService, CoverLetterService coverLetterService) {
+    public InterviewController(UserService userService, CoverLetterService coverLetterService, CoverLetterRepository coverLetterRepository) {
         this.userService = userService;
         this.coverLetterService = coverLetterService;
+        this.coverLetterRepository = coverLetterRepository;
     }
 
 
@@ -95,7 +98,8 @@ public class InterviewController {
         return "redirect:/list";
     }
 
-    @GetMapping("/{coverLetterId}")
+    //상세조회
+    @GetMapping("/list/{coverLetterId}")
     public String coverLetterItem(@PathVariable Long coverLetterId, Model model) {
         CoverLetter coverLetterItem = coverLetterService.findByCoverLetterId(coverLetterId);
         model.addAttribute("coverLetter", coverLetterItem);
@@ -103,12 +107,14 @@ public class InterviewController {
         return "basic/coverLetter";
     }
 
-//    @GetMapping("/{coverLetter}/delete")
-//    public String coverLetterDelete() {
-//
-//        return "ok";
-//    }
-//
+    //삭제
+    @PostMapping("/list/{coverLetterId}/delete")
+    public String coverLetterDelete(@PathVariable Long coverLetterId) {
+        coverLetterService.deleteCoverLetter(coverLetterId);
+        return "redirect:/list";
+    }
+
+    //면접실행
 //    @GetMapping("/{coverLetter}/execute")
 //    public String coverLetterExecute() {
 //

@@ -34,13 +34,20 @@
             justify-content: space-between;
             margin-top: 20px;
         }
-
+        pre {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-family: monospace;
+            background-color: #f5f5f5;
+            padding: 10px;
+            border-radius: 5px;
+        }
     </style>
 </head>
 <body>
     <div class="content">
         <h2 style="text-align: center;" th:text="${coverLetter.title}">자소서 제목</h2>
-        <p th:text="${coverLetter.content}">자소서 내용</p>
+        <pre th:utext="${coverLetter.content}">자소서 내용</pre>
         <div class="button-container">
             <!-- <button class="button button-list">목록으로</button>
             <button class="button button-interview">면접보기</button> -->
