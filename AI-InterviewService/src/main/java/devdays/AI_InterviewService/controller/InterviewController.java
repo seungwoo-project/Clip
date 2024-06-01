@@ -44,23 +44,23 @@ public class InterviewController {
 
         return "redirect:/list";
     }
-
-    @GetMapping("/{coverLetter}")
-    public String coverLetter() {
-
-        return "ok";
-    }
-
-    @GetMapping("/{coverLetter}/delete")
-    public String coverLetterDelete() {
-
-        return "ok";
-    }
-
-    @GetMapping("/{coverLetter}/execute")
-    public String coverLetterExecute() {
-
-        return "ok";
-    }
+//
+//    @GetMapping("/{coverLetter}")
+//    public String coverLetter() {
+//
+//        return "ok";
+//    }
+//
+//    @GetMapping("/{coverLetter}/delete")
+//    public String coverLetterDelete() {
+//
+//        return "ok";
+//    }
+//
+//    @GetMapping("/{coverLetter}/execute")
+//    public String coverLetterExecute() {
+//
+//        return "ok";
+//    }
 
 }
