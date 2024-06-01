@@ -37,18 +37,29 @@ public class InterviewController {
         return "basic/login";
     }
 
+    @GetMapping("/logout")
+    public String logout(HttpSession session) {
+        session.setAttribute("userId", null);
+        return "redirect:/";
+    }
+
     @PostMapping("/list")
     public String login(@RequestParam String userId, @RequestParam String password, Model model, HttpSession session) {
-        boolean loginSuccess = userService.login(userId, password);
+        if(session.getAttribute("userId") == null) {
+            boolean loginSuccess = userService.login(userId, password);
 
-        if (loginSuccess) {
-            model.addAttribute("message", "로그인이 성공하였습니다.");
-            session.setAttribute("userId", userId); // 세션에 사용자 아이디 저장
-            return "redirect:/list";
+            if (loginSuccess) {
+                model.addAttribute("message", "로그인이 성공하였습니다.");
+                session.setAttribute("userId", userId); // 세션에 사용자 아이디 저장
+                return "redirect:/list";
+            } else {
+                model.addAttribute("message", "로그인에 실패하였습니다.");
+                return "basic/login";
+            }
         } else {
-            model.addAttribute("message", "로그인에 실패하였습니다.");
-            return "basic/login";
+            return "redirect:/list";
         }
+
     }
 
     @GetMapping("/register")
