@@ -1,9 +1,11 @@
 package devdays.AI_InterviewService.controller;
 
 import devdays.AI_InterviewService.entity.CoverLetter;
+import devdays.AI_InterviewService.entity.Question;
 import devdays.AI_InterviewService.entity.User;
 import devdays.AI_InterviewService.repository.CoverLetterRepository;
 import devdays.AI_InterviewService.service.CoverLetterService;
+import devdays.AI_InterviewService.service.QuestionService;
 import devdays.AI_InterviewService.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -21,10 +24,12 @@ public class InterviewController {
 
     private final UserService userService;
     private final CoverLetterService coverLetterService;
+    private final QuestionService questionService;
     @Autowired
-    public InterviewController(UserService userService, CoverLetterService coverLetterService, CoverLetterRepository coverLetterRepository) {
+    public InterviewController(UserService userService, CoverLetterService coverLetterService, CoverLetterRepository coverLetterRepository, QuestionService questionService) {
         this.userService = userService;
         this.coverLetterService = coverLetterService;
+        this.questionService = questionService;
     }
 
 
@@ -37,6 +42,7 @@ public class InterviewController {
     @GetMapping("/logout")
     public String logout(HttpSession session) {
         session.setAttribute("userId", null);
+        session.setAttribute("coverLetterId", null);
         return "redirect:/";
     }
 
@@ -114,11 +120,22 @@ public class InterviewController {
         return "redirect:/list";
     }
 
-    //면접실행
-//    @GetMapping("/{coverLetter}/execute")
-//    public String coverLetterExecute() {
-//
-//        return "ok";
-//    }
+    //질문불러오기 페이지
+    @GetMapping("/list/{coverLetterId}/select")
+    public String coverLetterSelect(@PathVariable Long coverLetterId, HttpSession session, Model model) {
+        session.setAttribute("coverLetterId", coverLetterId);
+        String userId = (String) session.getAttribute("userId");
+        List<Question> questions = questionService.getAllQuestionsByUserId(userId);
+        model.addAttribute("questions", questions);
+
+        return "basic/selectlist";
+    }
+
+    // 사용자 질문추가 페이지
+    @GetMapping("/list/{coverLetterId}/select/addlist")
+    public String coverLetterAddList(@PathVariable Long coverLetterId) {
+
+        return "basic/addlist";
+    }
 
 }

@@ -4,7 +4,9 @@ import devdays.AI_InterviewService.entity.Question;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-@Repository
-public interface QuestionsRepository extends JpaRepository<Question, Long> {
+import java.util.List;
 
+@Repository
+public interface QuestionRepository extends JpaRepository<Question, Long> {
+    List<Question> findByUserId(String userId);
 }
