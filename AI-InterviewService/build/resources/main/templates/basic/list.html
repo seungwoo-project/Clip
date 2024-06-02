@@ -39,11 +39,42 @@
         .bd-mode-toggle .dropdown-menu .active .bi {
             display: block !important;
         }
+
+        .success-message {
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+            color: #155724;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            opacity: 1;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        .success-message.hide {
+            opacity: 0;
+        }
+
+        .message-content {
+            display: flex;
+            align-items: center;
+        }
+
+        .message-content i {
+            font-size: 24px;
+            margin-right: 10px;
+            color: #155724;
+        }
     </style>
 
 </head>
 <body>
-
+<div th:if="${message}" id="successMessage" class="alert alert-success success-message" role="alert">
+    <div class="message-content">
+        <i class="fas fa-check-circle"></i>
+        <p th:text="${message}"></p>
+    </div>
+</div>
 <header>
     <nav class="navbar navbar-expand-lg navbar-light bg-transparent py-1">
         <div class="container-fluid">
@@ -62,14 +93,14 @@
             <div class="col-lg-6 col-md-8 mx-auto">
                 <h1 class="fw-light">자소서 목록</h1>
                 <p class="lead text-body-secondary">AI 면접을 보고싶은 자소서를 선택하세요.</p>
-<!--                자소서 파일 처리-->
+                <!--자소서 파일 처리-->
                 <div style="display: inline-block;">
                     <form id="fileForm" method="post" enctype="multipart/form-data"  action="/upload" th:action="@{/upload}">
                         <input type="file" name="coverLetter" id="file" style="display: none;" onchange="submitForm()">
                         <button type="button" class="btn btn-success my-2" onclick="openFileDialog()">등록하기</button>
                     </form>
                 </div>
-<!--                -->
+
                 <a href="login.html" th:href="@{/logout}" class="btn btn-secondary my-2">로그아웃</a>
                 </input>
             </div>
@@ -122,5 +153,20 @@
     }
 </script>
 
+<!-- 로그인이 완료되었습니다. 기능 구현-->
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    var message = /*[[${message}]]*/ null;
+    if (message) {
+        var successMessage = document.getElementById('successMessage');
+        setTimeout(function() {
+            successMessage.classList.add('hide');
+            setTimeout(function() {
+                successMessage.style.display = 'none';
+            }, 500);
+        }, 1000); // 2초 후에 메시지를 숨김
+    }
+    /*]]>*/
+</script>
 </body>
 </html>

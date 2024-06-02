@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -48,13 +49,13 @@ public class InterviewController {
     }
 
     @PostMapping("/list")
-    public String login(@RequestParam String userId, @RequestParam String password, Model model, HttpSession session) {
-        if(session.getAttribute("userId") == null) {
+    public String login(@RequestParam String userId, @RequestParam String password, Model model, HttpSession session, RedirectAttributes redirectAttributes) {
+        if (session.getAttribute("userId") == null) {
             boolean loginSuccess = userService.login(userId, password);
 
             if (loginSuccess) {
-                model.addAttribute("message", "로그인이 성공하였습니다.");
-                session.setAttribute("userId", userId); // 세션에 사용자 아이디 저장
+                redirectAttributes.addFlashAttribute("message", "로그인이 성공하였습니다.");
+                session.setAttribute("userId", userId);
                 return "redirect:/list";
             } else {
                 model.addAttribute("errorMessage", "아이디 또는 비밀번호를 잘못 입력했습니다.");
@@ -63,7 +64,6 @@ public class InterviewController {
         } else {
             return "redirect:/list";
         }
-
     }
 
     @GetMapping("/register")
@@ -146,9 +146,8 @@ public class InterviewController {
     public String addSelectedQuestions(@RequestParam(value = "selectedQuestions", required = false) Long[] selectedQuestions, HttpSession session) {
         if (selectedQuestions != null) {
             // 선택된 질문 식별자 로그 출력
-            log.info("선택된 질문 식별자:");
             for (Long questionId : selectedQuestions) {
-                log.info("{}", questionId);
+                log.info("선택된 질문 식별자: {}", questionId);
             }
             session.setAttribute("selectedQuestions", selectedQuestions);
         } else {
