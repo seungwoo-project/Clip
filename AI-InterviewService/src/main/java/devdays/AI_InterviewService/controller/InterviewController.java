@@ -68,11 +68,12 @@ public class InterviewController {
     }
 
     @PostMapping("/register")
-    public String register(@ModelAttribute User user) {
+    public String register(@ModelAttribute User user, Model model) {
         try {
             userService.signup(user);
             return "redirect:/";
         } catch (IllegalArgumentException e) {
+            model.addAttribute("registerErrorMessage", "사용할 수 없는 아이디입니다. 다른 아이디를 입력해 주세요.");
             return "basic/register";
         }
     }
