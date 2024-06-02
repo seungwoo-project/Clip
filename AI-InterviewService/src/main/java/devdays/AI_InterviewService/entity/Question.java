@@ -17,4 +17,14 @@ public class Question {
 
     @Column(name = "ques")
     private String question;
+
+    public Question(Long id, String question, String userId) {
+        this.id = id;
+        this.question = question;
+        this.userId = userId;
+    }
+
+    public Question() {
+
+    }
 }

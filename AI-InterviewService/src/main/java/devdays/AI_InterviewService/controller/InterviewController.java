@@ -8,6 +8,7 @@ import devdays.AI_InterviewService.service.CoverLetterService;
 import devdays.AI_InterviewService.service.QuestionService;
 import devdays.AI_InterviewService.service.UserService;
 import jakarta.servlet.http.HttpSession;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Controller
-//@ResponseBody
+@Slf4j
 public class InterviewController {
 
     private final UserService userService;
@@ -125,16 +126,35 @@ public class InterviewController {
     public String coverLetterSelect(@PathVariable Long coverLetterId, HttpSession session, Model model) {
         session.setAttribute("coverLetterId", coverLetterId);
         String userId = (String) session.getAttribute("userId");
-        List<Question> questions = questionService.getAllQuestionsByUserId(userId);
+
+        //데이터베이스 있을 때
+//        List<Question> questions = questionService.getAllQuestionsByUserId(userId);
+
+        // 임의의 질문 데이터 생성 임시 테스트
+        List<Question> questions = new ArrayList<>();
+        questions.add(new Question(1L, "질문 1", userId));
+        questions.add(new Question(2L, "질문 2", userId));
+        questions.add(new Question(3L, "질문 3", userId));
+
         model.addAttribute("questions", questions);
 
         return "basic/selectlist";
     }
 
     // 사용자 질문추가 페이지
-    @GetMapping("/list/{coverLetterId}/select/addlist")
-    public String coverLetterAddList(@PathVariable Long coverLetterId) {
-
+    @PostMapping("/list/{coverLetterId}/select/addlist")
+    public String addSelectedQuestions(@RequestParam(value = "selectedQuestions", required = false) Long[] selectedQuestions, HttpSession session) {
+        if (selectedQuestions != null) {
+            // 선택된 질문 식별자 로그 출력
+            log.info("선택된 질문 식별자:");
+            for (Long questionId : selectedQuestions) {
+                log.info("{}", questionId);
+            }
+            session.setAttribute("selectedQuestions", selectedQuestions);
+        } else {
+            log.info("선택된 질문이 없습니다.");
+            session.setAttribute("selectedQuestions", new Long[0]); // 빈 배열로 설정
+        }
         return "basic/addlist";
     }
 
