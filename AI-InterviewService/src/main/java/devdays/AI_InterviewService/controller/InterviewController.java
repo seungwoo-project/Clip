@@ -71,7 +71,7 @@ public class InterviewController {
             userService.signup(user);
             return "redirect:/";
         } catch (IllegalArgumentException e) {
-            model.addAttribute("registerErrorMessage", "사용할 수 없는 아이디입니다. 다른 아이디를 입력해 주세요.");
+            model.addAttribute("registerErrorMessage", e.getMessage());
             return "basic/register";
         }
     }
