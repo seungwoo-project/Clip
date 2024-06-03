@@ -19,7 +19,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Controller
 @Slf4j
@@ -139,13 +138,8 @@ public class InterviewController {
     @PostMapping("/list/{coverLetterId}/select")
     public String addSelectedQuestions(@RequestParam(value = "selectedQuestions", required = false) Long[] selectedQuestions, HttpSession session) {
         if (selectedQuestions != null) {
-            // 선택된 질문 식별자 로그 출력
-            for (Long questionId : selectedQuestions) {
-                log.info("선택된 질문 식별자: {}", questionId);
-            }
             session.setAttribute("selectedQuestions", selectedQuestions);
         } else {
-            log.info("선택된 질문이 없습니다.");
             session.setAttribute("selectedQuestions", new Long[0]); // 빈 배열로 설정
         }
         return "basic/addlist";
@@ -158,14 +152,9 @@ public class InterviewController {
         return "redirect:/list/{coverLetterId}/loading";
     }
 
+    // 데이터베이스에서 선택질문 + 사용자 질문 추가 후 선택질문 + gpt가 만들어주는 질문 리스트 == 면접 질문
     @GetMapping("/list/{coverLetterId}/loading")
     public String loading(HttpSession session, Model model) {
-
-        return "basic/loading";
-    }
-
-    @GetMapping("/list/{coverLetterId}/interview")
-    public String interviewPage(HttpSession session, Model model) {
         Long[] selectedQuestions = (Long[]) session.getAttribute("selectedQuestions");
         List<String> userQuestions = (List<String>) session.getAttribute("userQuestions");
 
@@ -200,6 +189,50 @@ public class InterviewController {
         }
 
         model.addAttribute("questions", allQuestions);
+
+        return "basic/loading";
+    }
+
+    // gpt가 만들어주는 면접질문 리스트
+//    private List<String> generateQuestionsUsingGPT(String text) {
+//        String apiKey = "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";
+//        OpenAiService service = new OpenAiService(apiKey);
+//
+//        String prompt = "gpt, you are the developer interview personnel manager from now on. Create 10 Korean text questions based on the following self-introduction letter:\n\n" + text + "\n\nQuestion:\n1.";
+//
+//        CompletionRequest completionRequest = CompletionRequest.builder()
+//                .prompt(prompt)
+//                .model("gpt-3.5-turbo")
+//                .maxTokens(500)
+//                .n(1)
+//                .stop(List.of("11."))
+//                .build();
+//
+//        List<String> questions = new ArrayList<>();
+//
+//        try {
+//            List<CompletionChoice> choices = service.createCompletion(completionRequest).getChoices();
+//            String generatedText = choices.get(0).getText().trim();
+//            String[] lines = generatedText.split("\n");
+//
+//            for (String line : lines) {
+//                if (line.trim().startsWith("10.")) {
+//                    questions.add(line.trim().substring(3).trim());
+//                    break;
+//                } else {
+//                    questions.add(line.trim().substring(2).trim());
+//                }
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//
+//        return questions;
+//    }
+
+    @GetMapping("/list/{coverLetterId}/interview")
+    public String interviewPage(HttpSession session, Model model) {
+
         return "basic/interviewmain";
     }
 
