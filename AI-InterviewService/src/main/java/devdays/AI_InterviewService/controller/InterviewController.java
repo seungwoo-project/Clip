@@ -128,14 +128,7 @@ public class InterviewController {
         String userId = (String) session.getAttribute("userId");
 
         //데이터베이스 있을 때
-//        List<Question> questions = questionService.getAllQuestionsByUserId(userId);
-
-        // 임의의 질문 데이터 생성 임시 테스트
-        List<Question> questions = new ArrayList<>();
-        questions.add(new Question(1L, "질문 1", userId));
-        questions.add(new Question(2L, "질문 2", userId));
-        questions.add(new Question(3L, "질문 3", userId));
-
+        List<Question> questions = questionService.getAllQuestionsByUserId(userId);
         model.addAttribute("questions", questions);
 
         return "basic/selectlist";
