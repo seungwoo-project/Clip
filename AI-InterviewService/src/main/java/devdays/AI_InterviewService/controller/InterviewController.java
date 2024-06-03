@@ -188,7 +188,7 @@ public class InterviewController {
             log.info(question);
         }
 
-        model.addAttribute("questions", allQuestions);
+        session.setAttribute("questions", allQuestions);
 
         return "basic/loading";
     }
@@ -232,7 +232,13 @@ public class InterviewController {
 
     @GetMapping("/list/{coverLetterId}/interview")
     public String interviewPage(HttpSession session, Model model) {
+        List<String> allQuestions = (List<String>) session.getAttribute("questions");
 
+        if (allQuestions == null || allQuestions.isEmpty()) {
+            model.addAttribute("errorMessage", "면접 질문이 준비되지 않았습니다. 질문을 선택하거나 추가해주세요.");
+            return "basic/selectlist";
+        }
+        session.setAttribute("questions", allQuestions);
         return "basic/interviewmain";
     }
 
