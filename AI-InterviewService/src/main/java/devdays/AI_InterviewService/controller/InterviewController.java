@@ -19,6 +19,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @Slf4j
@@ -134,8 +135,8 @@ public class InterviewController {
         return "basic/selectlist";
     }
 
-    // 사용자 질문추가 페이지
-    @PostMapping("/list/{coverLetterId}/select/addlist")
+    // 질문선택 후 세션에 저장
+    @PostMapping("/list/{coverLetterId}/select")
     public String addSelectedQuestions(@RequestParam(value = "selectedQuestions", required = false) Long[] selectedQuestions, HttpSession session) {
         if (selectedQuestions != null) {
             // 선택된 질문 식별자 로그 출력
@@ -148,6 +149,58 @@ public class InterviewController {
             session.setAttribute("selectedQuestions", new Long[0]); // 빈 배열로 설정
         }
         return "basic/addlist";
+    }
+
+    // 사용자 질문 선택 후 세션에 저장
+    @PostMapping("/list/{coverLetterId}/userSelect")
+    public String addUserQuestions(@RequestBody List<String> userQuestions, HttpSession session) {
+        session.setAttribute("userQuestions", userQuestions);
+        return "redirect:/list/{coverLetterId}/loading";
+    }
+
+    @GetMapping("/list/{coverLetterId}/loading")
+    public String loading(HttpSession session, Model model) {
+
+        return "basic/loading";
+    }
+
+    @GetMapping("/list/{coverLetterId}/interview")
+    public String interviewPage(HttpSession session, Model model) {
+        Long[] selectedQuestions = (Long[]) session.getAttribute("selectedQuestions");
+        List<String> userQuestions = (List<String>) session.getAttribute("userQuestions");
+
+        List<String> allQuestions = new ArrayList<>();
+
+        if (selectedQuestions != null) {
+            List<Question> selectedQuestionList = questionService.getQuestionsByIds(selectedQuestions);
+            for (Question question : selectedQuestionList) {
+                allQuestions.add(question.getQuestion());
+            }
+            log.info("선택된 질문들:");
+            for (String question : allQuestions) {
+                log.info(question);
+            }
+        } else {
+            log.info("선택된 질문이 없습니다.");
+        }
+
+        if (userQuestions != null) {
+            allQuestions.addAll(userQuestions);
+            log.info("사용자 추가 질문들:");
+            for (String question : userQuestions) {
+                log.info(question);
+            }
+        } else {
+            log.info("사용자 추가 질문이 없습니다.");
+        }
+
+        log.info("전체 질문 리스트:");
+        for (String question : allQuestions) {
+            log.info(question);
+        }
+
+        model.addAttribute("questions", allQuestions);
+        return "basic/interviewmain";
     }
 
 }

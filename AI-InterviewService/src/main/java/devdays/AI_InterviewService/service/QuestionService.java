@@ -6,4 +6,7 @@ import java.util.List;
 
 public interface QuestionService {
     List<Question> getAllQuestionsByUserId(String userId);
+
+
+    List<Question> getQuestionsByIds(Long[] questionIds);
 }
