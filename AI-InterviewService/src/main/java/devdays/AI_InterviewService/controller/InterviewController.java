@@ -16,6 +16,7 @@ import devdays.AI_InterviewService.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -154,9 +155,9 @@ public class InterviewController {
 
     // 사용자 질문 선택 후 세션에 저장
     @PostMapping("/list/{coverLetterId}/userSelect")
-    public String addUserQuestions(@RequestBody List<String> userQuestions, HttpSession session) {
+    public ResponseEntity<Void> addUserQuestions(@RequestBody List<String> userQuestions, HttpSession session) {
         session.setAttribute("userQuestions", userQuestions);
-        return "redirect:/list/{coverLetterId}/loading";
+        return ResponseEntity.ok().build();
     }
 
     // 데이터베이스에서 선택질문 + 사용자 질문 추가 후 선택질문 + gpt가 만들어주는 질문 리스트 == 면접 질문
