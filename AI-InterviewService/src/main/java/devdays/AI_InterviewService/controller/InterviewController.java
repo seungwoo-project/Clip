@@ -160,12 +160,12 @@ public class InterviewController {
         return ResponseEntity.ok().build();
     }
 
-    // 데이터베이스에서 선택질문 + 사용자 질문 추가 후 선택질문 + gpt가 만들어주는 질문 리스트 == 면접 질문
     @GetMapping("/list/{coverLetterId}/loading")
     public String loading() {
         return "basic/loading";
     }
 
+    // 데이터베이스에서 선택질문 + 사용자 질문 추가 후 선택질문 + gpt가 만들어주는 질문 리스트 == 면접 질문
     @PostMapping("/list/{coverLetterId}/loading")
     public String allQuestionsInterview(HttpSession session) {
         Long[] selectedQuestions = (Long[]) session.getAttribute("selectedQuestions");
@@ -218,6 +218,8 @@ public class InterviewController {
 
         return "redirect:/list/" + coverLetterId + "/interview";
     }
+
+    // 실제 면접 화면 세션에 저장된 질문들을 꺼내와서 1개씩 보여주는 기능 추가해야함
     @GetMapping("/list/{coverLetterId}/interview")
     public String interviewPage(HttpSession session, Model model) {
 //        List<String> allQuestions = (List<String>) session.getAttribute("questions");
