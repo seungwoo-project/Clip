@@ -162,7 +162,12 @@ public class InterviewController {
 
     // 데이터베이스에서 선택질문 + 사용자 질문 추가 후 선택질문 + gpt가 만들어주는 질문 리스트 == 면접 질문
     @GetMapping("/list/{coverLetterId}/loading")
-    public String loading(HttpSession session, Model model) {
+    public String loading() {
+        return "basic/loading";
+    }
+
+    @PostMapping("/list/{coverLetterId}/loading")
+    public String allQuestionsInterview(HttpSession session) {
         Long[] selectedQuestions = (Long[]) session.getAttribute("selectedQuestions");
         List<String> userQuestions = (List<String>) session.getAttribute("userQuestions");
         Long coverLetterId = (Long) session.getAttribute("coverLetterId");
@@ -211,11 +216,23 @@ public class InterviewController {
 
         session.setAttribute("questions", allQuestions);
 
-        return "basic/loading";
+        return "redirect:/list/" + coverLetterId + "/interview";
+    }
+    @GetMapping("/list/{coverLetterId}/interview")
+    public String interviewPage(HttpSession session, Model model) {
+//        List<String> allQuestions = (List<String>) session.getAttribute("questions");
+//
+//        if (allQuestions == null || allQuestions.isEmpty()) {
+//            model.addAttribute("errorMessage", "면접 질문이 준비되지 않았습니다. 질문을 선택하거나 추가해주세요.");
+//            return "basic/selectlist";
+//        }
+//        session.setAttribute("questions", allQuestions);
+        return "basic/interviewmain";
     }
 
-    // gpt가 만들어주는 면접질문 리스트
 
+
+    // gpt가 만들어주는 면접질문 리스트
     private List<String> generateQuestionsUsingGPT(String text) {
         log.info("text : {}" , text);
         String apiKey = "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";
@@ -252,18 +269,6 @@ public class InterviewController {
         }
 
         return questions;
-    }
-
-    @GetMapping("/list/{coverLetterId}/interview")
-    public String interviewPage(HttpSession session, Model model) {
-        List<String> allQuestions = (List<String>) session.getAttribute("questions");
-
-        if (allQuestions == null || allQuestions.isEmpty()) {
-            model.addAttribute("errorMessage", "면접 질문이 준비되지 않았습니다. 질문을 선택하거나 추가해주세요.");
-            return "basic/selectlist";
-        }
-        session.setAttribute("questions", allQuestions);
-        return "basic/interviewmain";
     }
 
 }
