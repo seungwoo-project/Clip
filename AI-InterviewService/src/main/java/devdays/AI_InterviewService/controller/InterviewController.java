@@ -1,5 +1,11 @@
 package devdays.AI_InterviewService.controller;
 
+import com.theokanning.openai.OpenAiService;
+import com.theokanning.openai.completion.CompletionRequest;
+import com.theokanning.openai.completion.CompletionResult;
+import com.theokanning.openai.completion.chat.ChatCompletionRequest;
+import com.theokanning.openai.completion.chat.ChatCompletionResult;
+import com.theokanning.openai.completion.chat.ChatMessage;
 import devdays.AI_InterviewService.entity.CoverLetter;
 import devdays.AI_InterviewService.entity.Question;
 import devdays.AI_InterviewService.entity.User;
@@ -18,6 +24,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Controller
@@ -157,6 +164,7 @@ public class InterviewController {
     public String loading(HttpSession session, Model model) {
         Long[] selectedQuestions = (Long[]) session.getAttribute("selectedQuestions");
         List<String> userQuestions = (List<String>) session.getAttribute("userQuestions");
+        Long coverLetterId = (Long) session.getAttribute("coverLetterId");
 
         List<String> allQuestions = new ArrayList<>();
 
@@ -183,6 +191,18 @@ public class InterviewController {
             log.info("사용자 추가 질문이 없습니다.");
         }
 
+        if (coverLetterId != null) {
+            CoverLetter coverLetter = coverLetterService.findByCoverLetterId(coverLetterId);
+            List<String> gptQuestions = generateQuestionsUsingGPT(coverLetter.getContent());
+            allQuestions.addAll(gptQuestions);
+            log.info("GPT 생성 질문들:");
+            for (String question : gptQuestions) {
+                log.info(question);
+            }
+        } else {
+            log.info("GPT가 질문을 만들지 않았습니다.");
+        }
+
         log.info("전체 질문 리스트:");
         for (String question : allQuestions) {
             log.info(question);
@@ -194,41 +214,44 @@ public class InterviewController {
     }
 
     // gpt가 만들어주는 면접질문 리스트
-//    private List<String> generateQuestionsUsingGPT(String text) {
-//        String apiKey = "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";
-//        OpenAiService service = new OpenAiService(apiKey);
-//
-//        String prompt = "gpt, you are the developer interview personnel manager from now on. Create 10 Korean text questions based on the following self-introduction letter:\n\n" + text + "\n\nQuestion:\n1.";
-//
-//        CompletionRequest completionRequest = CompletionRequest.builder()
-//                .prompt(prompt)
-//                .model("gpt-3.5-turbo")
-//                .maxTokens(500)
-//                .n(1)
-//                .stop(List.of("11."))
-//                .build();
-//
-//        List<String> questions = new ArrayList<>();
-//
-//        try {
-//            List<CompletionChoice> choices = service.createCompletion(completionRequest).getChoices();
-//            String generatedText = choices.get(0).getText().trim();
-//            String[] lines = generatedText.split("\n");
-//
-//            for (String line : lines) {
-//                if (line.trim().startsWith("10.")) {
-//                    questions.add(line.trim().substring(3).trim());
-//                    break;
-//                } else {
-//                    questions.add(line.trim().substring(2).trim());
-//                }
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//
-//        return questions;
-//    }
+
+    private List<String> generateQuestionsUsingGPT(String text) {
+        log.info("text : {}" , text);
+        String apiKey = "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";
+        OpenAiService service = new OpenAiService(apiKey);
+
+        String content = "gpt, you are the developer interview personnel manager from now on. Create 5 Korean text questions based on the following coverLetter :\n\n" + text + "\n\nQuestion:\n1.";
+
+        ChatCompletionRequest chatCompletionRequest = ChatCompletionRequest.builder()
+                .messages(Arrays.asList(new ChatMessage("system", content)))
+                .model("gpt-3.5-turbo")
+                .maxTokens(300)
+                .n(1)
+                .build();
+
+        List<String> questions = new ArrayList<>();
+
+        try {
+            ChatCompletionResult chatCompletionResult = service.createChatCompletion(chatCompletionRequest);
+            String generatedText = chatCompletionResult.getChoices().get(0).getMessage().getContent().trim();
+            String[] lines = generatedText.split("\n");
+
+            for (String line : lines) {
+                line = line.trim();
+                if (line.matches("^\\d+\\..*")) {
+                    questions.add(line.replaceFirst("^\\d+\\.", "").trim());
+                }
+            }
+
+            // 요청 간격 조절
+            Thread.sleep(1000);
+        } catch (Exception e) {
+            // Handle exceptions
+            e.printStackTrace();
+        }
+
+        return questions;
+    }
 
     @GetMapping("/list/{coverLetterId}/interview")
     public String interviewPage(HttpSession session, Model model) {
