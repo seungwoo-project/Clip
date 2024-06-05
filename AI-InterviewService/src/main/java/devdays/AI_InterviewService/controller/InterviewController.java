@@ -216,19 +216,6 @@ public class InterviewController {
             log.info("사용자 추가 질문이 없습니다.");
         }
 
-<<<<<<< HEAD
-//        if (coverLetterId != null) {
-//            CoverLetter coverLetter = coverLetterService.findByCoverLetterId(coverLetterId);
-//            List<String> gptQuestions = generateQuestionsUsingGPT(coverLetter.getContent());
-//            allQuestions.addAll(gptQuestions);
-//            log.info("GPT 생성 질문들:");
-//            for (String question : gptQuestions) {
-//                log.info(question);
-//            }
-//        } else {
-//            log.info("GPT가 질문을 만들지 않았습니다.");
-//        }
-=======
         if (coverLetterId != null) {
             CoverLetter coverLetter = coverLetterService.findByCoverLetterId(coverLetterId);
             List<String> gptQuestions = generateQuestionsUsingGPT(coverLetter.getContent(), allQuestions);
@@ -241,7 +228,7 @@ public class InterviewController {
         } else {
             log.info("GPT가 질문을 만들지 않았습니다.");
         }
->>>>>>> 87ab16eb0148b13e0962041a68242a3d956479cd
+
 
         log.info("전체 질문 리스트:");
         for (String question : allQuestions) {
@@ -265,6 +252,13 @@ public class InterviewController {
         }
 //        model.addAttribute("questions", allQuestions);
         return "basic/interviewmain";
+    }
+
+    // 면접이 끝났습니다.
+    @GetMapping("/list/{coverLetterId}/interview/finish")
+    public String interviewfinish() {
+
+        return "basic/interviewfinish";
     }
 
     // 사용자가 추가한 질문리스트와 gpt가 만들어준 질문리스트를 종합해서 모델에 담아준 기능
