@@ -26,4 +26,9 @@ public class QuestionServiceImpl implements QuestionService {
         return questionRepository.findAllById(Arrays.asList(questionIds));
     }
 
+    @Override
+    public void saveAll(List<Question> selectedQuestions) {
+        questionRepository.saveAll(selectedQuestions);
+    }
+
 }

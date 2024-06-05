@@ -8,4 +8,6 @@ public interface QuestionService {
     List<Question> getAllQuestionsByUserId(String userId);
 
     List<Question> getQuestionsByIds(Long[] questionIds);
+
+    void saveAll(List<Question> selectedQuestions);
 }

@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @Slf4j
@@ -42,20 +43,24 @@ public class InterviewController {
         this.questionService = questionService;
     }
 
-
+    // 로그인 폼
     @GetMapping("/")
     public String login_form(HttpSession session) {
         if(session.getAttribute("userId") == null) return "basic/login";
         else return "redirect:/list";
     }
 
+    // 로그아웃시 세션초기화
     @GetMapping("/logout")
     public String logout(HttpSession session) {
-        session.setAttribute("userId", null);
-        session.setAttribute("coverLetterId", null);
+        session.removeAttribute("userId");
+        session.removeAttribute("coverLetterId");
+//        session.setAttribute("userId", null);
+//        session.setAttribute("coverLetterId", null);
         return "redirect:/";
     }
 
+    // 로그인 판별 여부에 따라 목록으로 갈건지 다시 로그인폼으로 가는 기능 구현
     @PostMapping("/list")
     public String login(@RequestParam String userId, @RequestParam String password, Model model, HttpSession session, RedirectAttributes redirectAttributes) {
         if (session.getAttribute("userId") == null) {
@@ -74,12 +79,14 @@ public class InterviewController {
         }
     }
 
+    // 회원가입 폼
     @GetMapping("/register")
     public String register_form() {
 
         return "basic/register";
     }
 
+    // 회원 데이터베이스 삽입 기능 구현
     @PostMapping("/register")
     public String register(@ModelAttribute User user, Model model) {
         try {
@@ -90,8 +97,17 @@ public class InterviewController {
             return "basic/register";
         }
     }
+
+    // 자소서 목록 출력 기능
     @GetMapping("/list")
     public String list(Model model, HttpSession session) {
+        if (session.getAttribute("questions") != null) {
+            session.removeAttribute("questions");
+            session.removeAttribute("coverLetterId");
+            session.removeAttribute("selectedQuestions");
+            session.removeAttribute("userQuestions");
+            session.removeAttribute("gptQuestions");
+        }
         String userId = (String) session.getAttribute("userId");
 
         List<CoverLetter> coverLetters = coverLetterService.findByUserId(userId);
@@ -99,6 +115,8 @@ public class InterviewController {
 
         return "basic/list";
     }
+
+    // 파일 업로드 기능 구현 후 목록에 출력
     @PostMapping("/upload")
     public String upload(@RequestParam("coverLetter") MultipartFile file, HttpSession session) throws IOException {
         String userId = (String) session.getAttribute("userId");
@@ -160,12 +178,13 @@ public class InterviewController {
         return ResponseEntity.ok().build();
     }
 
+    // 단순 로딩창 구현
     @GetMapping("/list/{coverLetterId}/loading")
     public String loading() {
         return "basic/loading";
     }
 
-    // 데이터베이스에서 선택질문 + 사용자 질문 추가 후 선택질문 + gpt가 만들어주는 질문 리스트 == 면접 질문
+    // 데이터베이스에서 선택질문 + 사용자 질문 추가 후 선택질문 + gpt가 만들어주는 질문 리스트를 종합해서 세션에 담아줌 --> 면접실행
     @PostMapping("/list/{coverLetterId}/loading")
     public String allQuestionsInterview(HttpSession session) {
         Long[] selectedQuestions = (Long[]) session.getAttribute("selectedQuestions");
@@ -200,6 +219,7 @@ public class InterviewController {
         if (coverLetterId != null) {
             CoverLetter coverLetter = coverLetterService.findByCoverLetterId(coverLetterId);
             List<String> gptQuestions = generateQuestionsUsingGPT(coverLetter.getContent(), allQuestions);
+            session.setAttribute("gptQuestions", gptQuestions);
             allQuestions.addAll(gptQuestions);
             log.info("GPT 생성 질문들:");
             for (String question : gptQuestions) {
@@ -232,7 +252,35 @@ public class InterviewController {
         return "basic/interviewmain";
     }
 
+    // 사용자가 추가한 질문리스트와 gpt가 만들어준 질문리스트를 종합해서 모델에 담아준 기능
+    @GetMapping("/list/{coverLetterId}/interview/save")
+    public String interviewSaveList(HttpSession session, Model model) {
+        List<String> userQuestions = (List<String>) session.getAttribute("userQuestions");
+        List<String> gptQuestions = (List<String>) session.getAttribute("gptQuestions");
 
+        List<String> saveQuestions = new ArrayList<>();
+
+        if(userQuestions != null) saveQuestions.addAll(userQuestions);
+        if(gptQuestions != null) saveQuestions.addAll(gptQuestions);
+
+        model.addAttribute("saveQuestions", saveQuestions);
+        return "basic/savelist";
+    }
+
+
+    // 체크박스에 선택된 질문들을 questions 데이터베이스에 삽입하는 기능
+    @PostMapping("/list/{coverLetterId}/interview/save")
+    public String saveSelectedQuestions(@RequestParam("selectedQuestions") List<String> selectedQuestions, HttpSession session) {
+        String userId = (String) session.getAttribute("userId");
+
+        List<Question> questions = selectedQuestions.stream()
+                .map(questionText -> new Question(questionText, userId))
+                .collect(Collectors.toList());
+
+        questionService.saveAll(questions);
+
+        return "redirect:/list";
+    }
 
     // gpt가 만들어주는 면접질문 리스트
     private List<String> generateQuestionsUsingGPT(String text, List<String> allQuestions) {
