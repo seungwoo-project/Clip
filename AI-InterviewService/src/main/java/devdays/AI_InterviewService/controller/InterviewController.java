@@ -217,18 +217,18 @@ public class InterviewController {
         }
 
 
-        if (coverLetterId != null) {
-            CoverLetter coverLetter = coverLetterService.findByCoverLetterId(coverLetterId);
-            List<String> gptQuestions = generateQuestionsUsingGPT(coverLetter.getContent(), allQuestions);
-            allQuestions.addAll(gptQuestions);
-            session.setAttribute("gptQuestions", gptQuestions);
-            log.info("GPT 생성 질문들:");
-            for (String question : gptQuestions) {
-                log.info(question);
-            }
-        } else {
-            log.info("GPT가 질문을 만들지 않았습니다.");
-        }
+//        if (coverLetterId != null) {
+//            CoverLetter coverLetter = coverLetterService.findByCoverLetterId(coverLetterId);
+//            List<String> gptQuestions = generateQuestionsUsingGPT(coverLetter.getContent(), allQuestions);
+//            allQuestions.addAll(gptQuestions);
+//            session.setAttribute("gptQuestions", gptQuestions);
+//            log.info("GPT 생성 질문들:");
+//            for (String question : gptQuestions) {
+//                log.info(question);
+//            }
+//        } else {
+//            log.info("GPT가 질문을 만들지 않았습니다.");
+//        }
 
         log.info("전체 질문 리스트:");
         for (String question : allQuestions) {
@@ -345,5 +345,7 @@ public class InterviewController {
 
         return questions;
     }
+
+
 
 }

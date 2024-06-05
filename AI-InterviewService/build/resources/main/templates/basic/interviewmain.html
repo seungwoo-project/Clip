@@ -27,6 +27,14 @@
             margin-top: 30px;
         }
 
+        .button-container {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+        }
+
         .grid-item {
             display: flex;
             justify-content: center;
@@ -76,7 +84,7 @@
 
     <main class="px-3">
         <div class="mb-4">
-            <h2 style="margin-top: 10px" id="questionElement">[[${session.questions.get(0)}]]</h2>
+            <h3 style="margin-top: 10px" id="questionElement">[[${session.questions.get(0)}]]</h3>
         </div>
         <div class="grid-container">
             <div class="grid-item">
@@ -91,8 +99,10 @@
             </div>
         </div>
         <div class="mt-4 text-end">
-            <button id="timerButton" class="btn btn-primary me-2" >시간 타이머</button>
-            <button id="nextButton" class="btn btn-success" onclick="resetTimer(); showNextQuestion()">다음질문</button>
+            <div class="button-container">
+                <button id="timerButton" class="btn btn-primary me-2">시간 타이머</button>
+                <button id="nextButton" class="btn btn-success" onclick="showNextQuestion()">다음질문</button>
+            </div>
         </div>
     </main>
 
@@ -134,7 +144,6 @@
         timer = 90;
         updateTimerDisplay();
         setTimerButtonPrimary();
-        startTimer();
     }
 
     function setTimerButtonDanger() {
@@ -148,8 +157,6 @@
         timerElement.classList.remove('btn-danger');
         timerElement.classList.add('btn-primary');
     }
-
-    startTimer();
 
     var video = document.querySelector("#videoElementUser");
 
@@ -168,11 +175,46 @@
     const questions = [[${session.questions}]];
     const nextButton = document.getElementById('nextButton');
     const coverLetterId = [[${session.coverLetterId}]];
+    let isVoiceLoaded = false;
 
-    function showNextQuestion() {
+    function speakQuestion(text) {
+        return new Promise((resolve) => {
+            const utterance = new SpeechSynthesisUtterance(text);
+
+            const voice = speechSynthesis.getVoices().find(voice => voice.name === 'Google 한국의');
+            if (voice) {
+                utterance.voice = voice;
+            }
+
+            utterance.rate = 0.9;
+            utterance.pitch = 0.9;
+            utterance.volume = 0.8;
+
+            utterance.onend = () => {
+                resolve();
+            };
+
+            window.speechSynthesis.speak(utterance);
+        });
+    }
+
+    async function startInterview() {
+        const introText = "안녕하세요, 면접 대상자님. 오늘 면접에 참여해 주셔서 감사합니다. 이제부터 면접을 시작하도록 하겠습니다. 편안한 마음으로 질문에 답변해 주시기 바랍니다.";
+        document.getElementById('questionElement').textContent = introText;
+        await speakQuestion(introText);
+        showNextQuestion();
+    }
+
+    async function showNextQuestion() {
         currentQuestionIndex++;
         if (currentQuestionIndex < questions.length) {
-            document.getElementById('questionElement').textContent = questions[currentQuestionIndex];
+            const questionText = questions[currentQuestionIndex];
+            document.getElementById('questionElement').textContent = questionText;
+            resetTimer();
+            nextButton.disabled = true;
+            await speakQuestion(questionText);
+            nextButton.disabled = false;
+            startTimer();
             if (currentQuestionIndex === questions.length - 1) {
                 nextButton.textContent = '면접 끝내기';
                 nextButton.onclick = function() {
@@ -186,7 +228,18 @@
         window.location.href = '/list/' + coverLetterId + '/interview/finish';
     }
 
-    showNextQuestion();
+    function onVoicesLoaded() {
+        isVoiceLoaded = true;
+        startInterview();
+    }
+
+    if (speechSynthesis.onvoiceschanged !== undefined) {
+        speechSynthesis.onvoiceschanged = onVoicesLoaded;
+    }
+
+    if (isVoiceLoaded) {
+        startInterview();
+    }
 </script>
 </body>
 </html>
