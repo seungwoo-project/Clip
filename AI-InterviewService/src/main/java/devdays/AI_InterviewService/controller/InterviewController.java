@@ -197,17 +197,17 @@ public class InterviewController {
             log.info("사용자 추가 질문이 없습니다.");
         }
 
-        if (coverLetterId != null) {
-            CoverLetter coverLetter = coverLetterService.findByCoverLetterId(coverLetterId);
-            List<String> gptQuestions = generateQuestionsUsingGPT(coverLetter.getContent());
-            allQuestions.addAll(gptQuestions);
-            log.info("GPT 생성 질문들:");
-            for (String question : gptQuestions) {
-                log.info(question);
-            }
-        } else {
-            log.info("GPT가 질문을 만들지 않았습니다.");
-        }
+//        if (coverLetterId != null) {
+//            CoverLetter coverLetter = coverLetterService.findByCoverLetterId(coverLetterId);
+//            List<String> gptQuestions = generateQuestionsUsingGPT(coverLetter.getContent());
+//            allQuestions.addAll(gptQuestions);
+//            log.info("GPT 생성 질문들:");
+//            for (String question : gptQuestions) {
+//                log.info(question);
+//            }
+//        } else {
+//            log.info("GPT가 질문을 만들지 않았습니다.");
+//        }
 
         log.info("전체 질문 리스트:");
         for (String question : allQuestions) {
@@ -222,13 +222,14 @@ public class InterviewController {
     // 실제 면접 화면 세션에 저장된 질문들을 꺼내와서 1개씩 보여주는 기능 추가해야함
     @GetMapping("/list/{coverLetterId}/interview")
     public String interviewPage(HttpSession session, Model model) {
-//        List<String> allQuestions = (List<String>) session.getAttribute("questions");
-//
-//        if (allQuestions == null || allQuestions.isEmpty()) {
-//            model.addAttribute("errorMessage", "면접 질문이 준비되지 않았습니다. 질문을 선택하거나 추가해주세요.");
-//            return "basic/selectlist";
-//        }
-//        session.setAttribute("questions", allQuestions);
+        List<String> allQuestions = (List<String>) session.getAttribute("questions");
+
+        if (allQuestions == null || allQuestions.isEmpty()) {
+            Long coverLetterId = (Long) session.getAttribute("coverLetterId");
+            model.addAttribute("errorMessage", "면접 질문이 준비되지 않았습니다. 질문을 선택하거나 추가해주세요.");
+            return "redirect:/list/" + coverLetterId + "/select";
+        }
+//        model.addAttribute("questions", allQuestions);
         return "basic/interviewmain";
     }
 

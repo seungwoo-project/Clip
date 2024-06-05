@@ -76,7 +76,7 @@
 
     <main class="px-3">
         <div class="mb-4">
-            <h2 style="margin-top: 10px">질문 나오는 곳</h2>
+            <h2 style="margin-top: 10px" id="questionElement">[[${session.questions.get(0)}]]</h2>
         </div>
         <div class="grid-container">
             <div class="grid-item">
@@ -92,7 +92,7 @@
         </div>
         <div class="mt-4 text-end">
             <button id="timerButton" class="btn btn-primary me-2" >시간 타이머</button>
-            <button class="btn btn-success" onclick="resetTimer()">다음질문 버튼</button>
+            <button class="btn btn-success" onclick="showNextQuestion(); resetTimer()">다음질문</button>
         </div>
     </main>
 
@@ -161,6 +161,18 @@
             .catch(function (error) {
                 console.log("Something went wrong!");
             });
+    }
+</script>
+<script th:inline="javascript">
+    let currentQuestionIndex = 0;
+    const questions = [[${session.questions}]];
+
+    function showNextQuestion() {
+        currentQuestionIndex++;
+        if (currentQuestionIndex >= questions.length) {
+            currentQuestionIndex = 0;
+        }
+        document.getElementById('questionElement').textContent = questions[currentQuestionIndex];
     }
 </script>
 </body>
