@@ -199,7 +199,7 @@ public class InterviewController {
 
         if (coverLetterId != null) {
             CoverLetter coverLetter = coverLetterService.findByCoverLetterId(coverLetterId);
-            List<String> gptQuestions = generateQuestionsUsingGPT(coverLetter.getContent());
+            List<String> gptQuestions = generateQuestionsUsingGPT(coverLetter.getContent(), allQuestions);
             allQuestions.addAll(gptQuestions);
             log.info("GPT 생성 질문들:");
             for (String question : gptQuestions) {
@@ -235,13 +235,26 @@ public class InterviewController {
 
 
     // gpt가 만들어주는 면접질문 리스트
-    private List<String> generateQuestionsUsingGPT(String text) {
-        log.info("text : {}" , text);
+    private List<String> generateQuestionsUsingGPT(String text, List<String> allQuestions) {
         String apiKey = "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";
         OpenAiService service = new OpenAiService(apiKey);
 
-        String content = "gpt, you are the developer interview personnel manager from now on. Create 5 Korean text questions based on the following coverLetter :\n\n" + text + "\n\nQuestion:\n1.";
+        String content;
 
+        if (allQuestions != null && !allQuestions.isEmpty()) {
+            // allQuestions에 질문이 있는 경우
+            String questionsText = String.join("\n", allQuestions);
+            content = "gpt, you are the developer interview personnel manager from now on. " +
+                    "Read the cover letter I show you and make 5 interview questions in Korean except for "+ questionsText + " Cover Letter :\n\n" + text + "\n\nQuestion:\n1.";
+        } else {
+            // allQuestions에 질문이 없는 경우
+            content = "gpt, you are the developer interview personnel manager from now on. " +
+                    "Read the cover letter I show you and make 5 interview questions in Korean:\n\n" +
+                    "Cover Letter:\n" + text + "\n\nQuestion:\n1.";
+        }
+
+
+        log.info("프롬프트 내용 : {}" , content);
         ChatCompletionRequest chatCompletionRequest = ChatCompletionRequest.builder()
                 .messages(Arrays.asList(new ChatMessage("system", content)))
                 .model("gpt-3.5-turbo")
