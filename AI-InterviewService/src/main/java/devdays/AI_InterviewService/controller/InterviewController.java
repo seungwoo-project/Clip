@@ -253,6 +253,13 @@ public class InterviewController {
         return "basic/interviewmain";
     }
 
+    // 면접이 끝났습니다.
+    @GetMapping("/list/{coverLetterId}/interview/finish")
+    public String interviewfinish() {
+
+        return "basic/interviewfinish";
+    }
+
     // 사용자가 추가한 질문리스트와 gpt가 만들어준 질문리스트를 종합해서 모델에 담아준 기능
     @GetMapping("/list/{coverLetterId}/interview/save")
     public String interviewSaveList(HttpSession session, Model model) {
