@@ -69,15 +69,15 @@
         <div class="grid-container mt-3">
             <div class="grid-item">
                 <p style="font-size: 20px">자소서 목록으로 가고싶다면</p>
-                <button class="btn btn-secondary" onclick="location.href='list.html'" th:onclick="|locaion.href='@{/list}'|">목록으로</button>
+                <button class="btn btn-secondary" onclick="location.href='list.html'" th:onclick="|location.href='@{/list}'|">목록으로</button>
             </div>
             <div class="grid-item">
                 <p style="font-size: 20px">방금 질문으로 면접을 다시 보고 싶다면</p>
-                <button class="btn btn-primary me-2" onclick="location.href='interviewmain.html'" th:onclick="|locaion.href='@{/list/{coverLetterId}/interview(coverLetterId = ${session.coverLetterId})}'|">면접보기</button>
+                <button class="btn btn-primary me-2" onclick="location.href='interviewmain.html'" th:onclick="|location.href='@{/list/{coverLetterId}/interview(coverLetterId = ${session.coverLetterId})}'|">면접보기</button>
             </div>
             <div class="grid-item">
                 <p style="font-size: 20px">면접본 질문을 선택해서 저장하고싶다면</p>
-                <button class="btn btn-success" onclick="location.href='savelist.html'" th:onclick="|location.href='@{/list/{coverLetterId}/interview/save}(coverLetterId = ${session.coverLetterId})}'|">저장하기</button>
+                <button class="btn btn-success" onclick="location.href='savelist.html'" th:onclick="|location.href='@{/list/{coverLetterId}/interview/save(coverLetterId = ${session.coverLetterId})}'|">저장하기</button>
             </div>
         </div>
     </main>

@@ -217,17 +217,18 @@ public class InterviewController {
         }
 
 
-//        if (coverLetterId != null) {
-//            CoverLetter coverLetter = coverLetterService.findByCoverLetterId(coverLetterId);
-//            List<String> gptQuestions = generateQuestionsUsingGPT(coverLetter.getContent());
-//            allQuestions.addAll(gptQuestions);
-//            log.info("GPT 생성 질문들:");
-//            for (String question : gptQuestions) {
-//                log.info(question);
-//            }
-//        } else {
-//            log.info("GPT가 질문을 만들지 않았습니다.");
-//        }
+        if (coverLetterId != null) {
+            CoverLetter coverLetter = coverLetterService.findByCoverLetterId(coverLetterId);
+            List<String> gptQuestions = generateQuestionsUsingGPT(coverLetter.getContent(), allQuestions);
+            allQuestions.addAll(gptQuestions);
+            session.setAttribute("gptQuestions", gptQuestions);
+            log.info("GPT 생성 질문들:");
+            for (String question : gptQuestions) {
+                log.info(question);
+            }
+        } else {
+            log.info("GPT가 질문을 만들지 않았습니다.");
+        }
 
         log.info("전체 질문 리스트:");
         for (String question : allQuestions) {
@@ -249,7 +250,7 @@ public class InterviewController {
             model.addAttribute("errorMessage", "면접 질문이 준비되지 않았습니다. 질문을 선택하거나 추가해주세요.");
             return "redirect:/list/" + coverLetterId + "/select";
         }
-//        model.addAttribute("questions", allQuestions);
+
         return "basic/interviewmain";
     }
 
@@ -278,14 +279,17 @@ public class InterviewController {
 
     // 체크박스에 선택된 질문들을 questions 데이터베이스에 삽입하는 기능
     @PostMapping("/list/{coverLetterId}/interview/save")
-    public String saveSelectedQuestions(@RequestParam("selectedQuestions") List<String> selectedQuestions, HttpSession session) {
-        String userId = (String) session.getAttribute("userId");
+    public String saveSelectedQuestions(@RequestParam(value = "selectedQuestions", required = false) List<String> selectedQuestions, HttpSession session) {
 
-        List<Question> questions = selectedQuestions.stream()
-                .map(questionText -> new Question(questionText, userId))
-                .collect(Collectors.toList());
+        if(selectedQuestions != null && !selectedQuestions.isEmpty()) {
+            String userId = (String) session.getAttribute("userId");
 
-        questionService.saveAll(questions);
+            List<Question> questions = selectedQuestions.stream()
+                    .map(questionText -> new Question(questionText, userId))
+                    .collect(Collectors.toList());
+
+            questionService.saveAll(questions);
+        }
 
         return "redirect:/list";
     }
