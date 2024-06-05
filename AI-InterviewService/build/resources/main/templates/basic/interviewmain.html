@@ -92,7 +92,7 @@
         </div>
         <div class="mt-4 text-end">
             <button id="timerButton" class="btn btn-primary me-2" >시간 타이머</button>
-            <button class="btn btn-success" onclick="showNextQuestion(); resetTimer()">다음질문</button>
+            <button id="nextButton" class="btn btn-success" onclick="showNextQuestion(); resetTimer()">다음질문</button>
         </div>
     </main>
 
@@ -164,16 +164,24 @@
     }
 </script>
 <script th:inline="javascript">
-    let currentQuestionIndex = 0;
+    let currentQuestionIndex = -1;
     const questions = [[${session.questions}]];
+    const nextButton = document.getElementById('nextButton');
 
     function showNextQuestion() {
         currentQuestionIndex++;
-        if (currentQuestionIndex >= questions.length) {
-            currentQuestionIndex = 0;
+        if (currentQuestionIndex < questions.length) {
+            document.getElementById('questionElement').textContent = questions[currentQuestionIndex];
+            if (currentQuestionIndex === questions.length - 1) {
+                nextButton.textContent = '면접 끝내기';
+            }
+        } else {
+            // 면접 종료 처리
+            alert('면접이 종료되었습니다.');
+            // 다른 동작 수행 가능 (예: 결과 페이지로 이동)
         }
-        document.getElementById('questionElement').textContent = questions[currentQuestionIndex];
     }
+    showNextQuestion();
 </script>
 </body>
 </html>
