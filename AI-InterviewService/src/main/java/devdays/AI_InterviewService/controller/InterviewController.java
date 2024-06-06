@@ -53,10 +53,7 @@ public class InterviewController {
     // 로그아웃시 세션초기화
     @GetMapping("/logout")
     public String logout(HttpSession session) {
-        session.removeAttribute("userId");
-        session.removeAttribute("coverLetterId");
-//        session.setAttribute("userId", null);
-//        session.setAttribute("coverLetterId", null);
+        session.invalidate(); // 세션 무효화
         return "redirect:/";
     }
 
@@ -101,13 +98,6 @@ public class InterviewController {
     // 자소서 목록 출력 기능
     @GetMapping("/list")
     public String list(Model model, HttpSession session) {
-        if (session.getAttribute("questions") != null) {
-            session.removeAttribute("questions");
-            session.removeAttribute("coverLetterId");
-            session.removeAttribute("selectedQuestions");
-            session.removeAttribute("userQuestions");
-            session.removeAttribute("gptQuestions");
-        }
         String userId = (String) session.getAttribute("userId");
 
         List<CoverLetter> coverLetters = coverLetterService.findByUserId(userId);
