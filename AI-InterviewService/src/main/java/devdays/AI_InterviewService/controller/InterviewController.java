@@ -40,7 +40,7 @@ public class InterviewController {
 
     // 데이터베이스에서 선택질문 + 사용자 질문 추가 후 선택질문 + gpt가 만들어주는 질문 리스트를 종합해서 세션에 담아줌 --> 면접실행
     @PostMapping("/list/{coverLetterId}/loading")
-    public String allQuestionsInterview(HttpSession session) {
+    public String allQuestionsInterview(@RequestParam("questionCount") int questionCount,HttpSession session) {
         Long[] selectedQuestions = (Long[]) session.getAttribute("selectedQuestions");
         List<String> userQuestions = (List<String>) session.getAttribute("userQuestions");
         Long coverLetterId = (Long) session.getAttribute("coverLetterId");
@@ -71,18 +71,20 @@ public class InterviewController {
         }
 
 
-//        if (coverLetterId != null) {
-//            CoverLetter coverLetter = coverLetterService.findByCoverLetterId(coverLetterId);
-//            List<String> gptQuestions = generateQuestionsUsingGPT(coverLetter.getContent(), allQuestions);
-//            allQuestions.addAll(gptQuestions);
-//            session.setAttribute("gptQuestions", gptQuestions);
-//            log.info("GPT 생성 질문들:");
-//            for (String question : gptQuestions) {
-//                log.info(question);
-//            }
-//        } else {
-//            log.info("GPT가 질문을 만들지 않았습니다.");
-//        }
+        if (questionCount > 0) {
+            if (coverLetterId != null) {
+                CoverLetter coverLetter = coverLetterService.findByCoverLetterId(coverLetterId);
+                List<String> gptQuestions = generateQuestionsUsingGPT(coverLetter.getContent(), allQuestions, questionCount);
+                allQuestions.addAll(gptQuestions);
+                session.setAttribute("gptQuestions", gptQuestions);
+                log.info("GPT 생성 질문들:");
+                for (String question : gptQuestions) {
+                    log.info(question);
+                }
+            }
+        } else {
+            log.info("GPT가 질문을 만들지 않았습니다.");
+        }
 
         log.info("전체 질문 리스트:");
         for (String question : allQuestions) {
@@ -149,35 +151,34 @@ public class InterviewController {
     }
 
     // gpt가 만들어주는 면접질문 리스트
-    private List<String> generateQuestionsUsingGPT(String text, List<String> allQuestions) {
+    private List<String> generateQuestionsUsingGPT(String text, List<String> allQuestions, int questionCount) {
         String apiKey = "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";
         OpenAiService service = new OpenAiService(apiKey);
 
         String content;
+        String questionsText = String.join("\n", allQuestions);
 
         if (allQuestions != null && !allQuestions.isEmpty()) {
             // allQuestions에 질문이 있는 경우
-            String questionsText = String.join("\n", allQuestions);
-            content = "gpt, you are the developer interview personnel manager from now on. " +
-                    "Read the cover letter I show you and make 5 interview questions in Korean except for "+ questionsText + " Cover Letter :\n\n" + text + "\n\nQuestion:\n1.";
+            content = "gpt, 지금부터 당신은 개발자 면접관 역할을 합니다. " +
+                    "제가 제공하는 자기소개서를 읽고, 기존 질문들을 제외한 나머지 내용에 기반하여 새로운 면접 질문 " + questionCount + "개를 Q1. 이런 식으로 한국어로 작성해 주세요.\n\n" +
+                    "기존 질문들:\n" + questionsText + "\n\n" +
+                    "자기소개서 내용:\n" + text + "\n\n";
         } else {
             // allQuestions에 질문이 없는 경우
-            content = "gpt, you are the developer interview personnel manager from now on. " +
-                    "Read the cover letter I show you and make 5 interview questions in Korean:\n\n" +
-                    "Cover Letter:\n" + text + "\n\nQuestion:\n1.";
+            content = "gpt, 지금부터 당신은 개발자 면접관 역할을 합니다. " +
+                    "제가 제공하는 자기소개서를 읽고, 내용에 기반하여 면접 질문 " + questionCount + "개를 Q1. 이런 식으로 한국어로 작성해 주세요.\n\n" +
+                    "자기소개서 내용:\n" + text + "\n\n";
         }
 
-
-        log.info("프롬프트 내용 : {}" , content);
         ChatCompletionRequest chatCompletionRequest = ChatCompletionRequest.builder()
                 .messages(Arrays.asList(new ChatMessage("system", content)))
                 .model("gpt-3.5-turbo")
-                .maxTokens(300)
+                .maxTokens(500)
                 .n(1)
                 .build();
 
         List<String> questions = new ArrayList<>();
-
         try {
             ChatCompletionResult chatCompletionResult = service.createChatCompletion(chatCompletionRequest);
             String generatedText = chatCompletionResult.getChoices().get(0).getMessage().getContent().trim();
@@ -185,13 +186,13 @@ public class InterviewController {
 
             for (String line : lines) {
                 line = line.trim();
-                if (line.matches("^\\d+\\..*")) {
-                    questions.add(line.replaceFirst("^\\d+\\.", "").trim());
+                if (!line.isEmpty() && line.matches("^Q\\d+\\.\\s*(.*)")) {
+                    questions.add(line.replaceAll("^Q\\d+\\.\\s*", "").trim());
                 }
             }
 
             // 요청 간격 조절
-            Thread.sleep(1000);
+            Thread.sleep(2000);
         } catch (Exception e) {
             // Handle exceptions
             e.printStackTrace();
@@ -199,7 +200,6 @@ public class InterviewController {
 
         return questions;
     }
-
 
 
 }

@@ -16,28 +16,43 @@
           integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 
     <style>
+        /* 미디어 쿼리 최적화 */
         @media (min-width: 768px) {
             .bd-placeholder-img-lg {
                 font-size: 3.5rem;
             }
         }
-        .nav-scroller .nav {
-            display: flex;
-            flex-wrap: nowrap;
-            padding-bottom: 1rem;
-            margin-top: -1px;
-            overflow-x: auto;
-            text-align: center;
-            white-space: nowrap;
-            -webkit-overflow-scrolling: touch;
-        }
 
-        .bd-mode-toggle .dropdown-menu .active .bi {
-            display: block !important;
-        }
+        /* 불필요한 스타일 제거 */
 
         #loadingText {
             display: none;
+        }
+
+        .question-count-container {
+            margin-bottom: 20px;
+        }
+
+        .question-count-label {
+            font-size: 25px;
+            color: #fff;
+            margin-right: 10px;
+        }
+
+        .question-count-input {
+            background-color: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 5px;
+            color: #fff;
+            font-size: 22px;
+            padding: 5px 10px;
+            width: 75px;
+            text-align: left;
+        }
+
+        .question-count-input:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.3);
         }
     </style>
 
@@ -47,25 +62,28 @@
 <body class="d-flex h-100 text-center text-bg-dark">
 
 <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
-    <header class="mb-auto text-center">
+    <header class="mb-auto">
         <div>
-            <h3 class="mb-0">AI-Interview</h3>
+            <h3 class="float-md-middle mb-0">AI-Interview</h3>
         </div>
     </header>
 
     <main class="px-3">
         <div id="beforeLoading">
-            <p class="lead">면접보기 버튼을 누르면 AI면접관이 면접질문을 준비할겁니다!</p>
+            <p class="lead" style="font-size: 50px">면접보기 버튼을 누르면 AI면접관이 면접질문을 준비할겁니다!</p>
         </div>
         <div id="loadingText">
             <h1>대기중</h1>
-            <p class="lead">AI면접관이 자기소개서를 읽고 면접질문을 준비하고 있습니다.</p>
+            <p class="lead" style="font-size: 30px">AI면접관이 자기소개서를 읽고 면접질문을 준비하고 있습니다.</p>
         </div>
-        <p class="lead">
+        <div class="question-count-container">
+            <label for="questionCount" class="question-count-label">AI 질문 개수 설정 : </label>
+            <input type="number" id="questionCount" class="question-count-input" min="0" max="10" value="5">
+        </div>
         <form th:action="@{/list/{coverLetterId}/loading(coverLetterId=${session.coverLetterId})}" method="post">
-            <button id="startInterviewBtn" class="btn btn-primary" type="submit">면접 보기</button>
+            <input type="hidden" id="questionCountInput" name="questionCount">
+            <button id="startInterviewBtn" class="btn btn-primary">면접 보기</button>
         </form>
-        </p>
     </main>
 
     <footer class="mt-auto text-white-50">
@@ -78,19 +96,56 @@
         crossorigin="anonymous"></script>
 
 <script>
+    const questionCountInput = document.getElementById('questionCount');
+
+    questionCountInput.addEventListener('keydown', function(event) {
+        if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
+            // 화살표 위/아래 키는 허용
+        } else {
+            event.preventDefault(); // 숫자 키를 포함한 다른 모든 키 입력을 무시
+        }
+    });
+
+    questionCountInput.addEventListener('input', function() {
+        const value = parseInt(this.value);
+
+        if (isNaN(value)) {
+            this.value = value;
+        } else if (value < 0) {
+            this.value = 0;
+        } else if (value > 10) {
+            this.value = 10;
+        }
+    });
+
+    questionCountInput.addEventListener('blur', function() {
+        if (this.value === '') {
+            this.value = 0;
+        }
+    });
+    // 면접 보기 버튼 클릭 이벤트 핸들러
     document.getElementById('startInterviewBtn').addEventListener('click', function(event) {
         event.preventDefault(); // 기본 동작 막기
 
+        // 선택된 질문 개수 가져오기
+        const questionCount = document.getElementById('questionCount').value;
+        // 히든 필드에 선택된 질문 개수 설정
+        document.getElementById('questionCountInput').value = questionCount;
+
+        // 버튼 텍스트 변경 및 비활성화
         this.innerHTML = `
             <span class="spinner-grow spinner-grow-sm" aria-hidden="true"></span>
             <span role="status">Loading...</span>
         `;
         this.disabled = true;
 
+        // 로딩 전 텍스트 숨기기
         document.getElementById('beforeLoading').style.display = 'none';
+        // 로딩 텍스트 보이기
         document.getElementById('loadingText').style.display = 'block';
 
-        this.closest('form').submit(); // 폼 제출
+        // 폼 제출
+        this.closest('form').submit();
     });
 </script>
 
