@@ -208,7 +208,9 @@
     async function startInterview() {
         const introText = "안녕하세요, 면접 대상자님. 오늘 면접에 참여해 주셔서 감사합니다. 이제부터 면접을 시작하도록 하겠습니다. 편안한 마음으로 질문에 답변해 주시기 바랍니다.";
         document.getElementById('questionElement').textContent = introText;
+        nextButton.disabled = true; // 버튼 비활성화
         await speakQuestion(introText);
+        nextButton.disabled = false; // 버튼 활성화
         showNextQuestion();
     }
 
