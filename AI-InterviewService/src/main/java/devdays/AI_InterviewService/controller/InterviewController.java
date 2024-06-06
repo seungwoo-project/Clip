@@ -160,6 +160,14 @@ public class InterviewController {
         return "basic/selectlist";
     }
 
+    // 질문불러오기 목록 페이지에서 삭제버튼 클릭시 questions데이터베이스에 참조하여 삭제하는 기능
+    @GetMapping("/list/{questionId}/select/delete")
+    public String selectListDelete(@PathVariable Long questionId, HttpSession session) {
+        questionService.deleteQuestion(questionId);
+        Long coverLetterId = (Long)session.getAttribute("coverLetterId");
+        return "redirect:/list/" + coverLetterId + "/select";
+    }
+
     // 질문선택 후 세션에 저장
     @PostMapping("/list/{coverLetterId}/select")
     public String addSelectedQuestions(@RequestParam(value = "selectedQuestions", required = false) Long[] selectedQuestions, HttpSession session) {

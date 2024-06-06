@@ -34,6 +34,7 @@
             <tr>
                 <th style="width: 10%;">선택</th>
                 <th>질문</th>
+                <th style="width: 10%;"></th>
             </tr>
             </thead>
             <tbody>
@@ -44,6 +45,9 @@
                     </div>
                 </td>
                 <td th:text="${question.question}"></td>
+                <td class="text-end">
+                    <a th:href="@{/list/{questionId}/select/delete(questionId=${question.id})}" class="btn-close" aria-label="Close"></a>
+                </td>
             </tr>
             </tbody>
         </table>
