@@ -72,6 +72,13 @@
 
     <!-- Custom styles for this template -->
     <link href="cover.css" rel="stylesheet">
+
+    <script> // 면접 페이지에서 뒤로가기 못하게 막는 기능
+        history.pushState(null, null, location.href);
+        window.onpopstate = function (event) {
+            history.go(1);
+        };
+    </script>
 </head>
 <body class="d-flex h-100 text-center text-bg-dark">
 

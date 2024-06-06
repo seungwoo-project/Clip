@@ -32,10 +32,7 @@ public class UserController {
     // 로그아웃시 세션초기화
     @GetMapping("/logout")
     public String logout(HttpSession session) {
-        session.removeAttribute("userId");
-        session.removeAttribute("coverLetterId");
-//        session.setAttribute("userId", null);
-//        session.setAttribute("coverLetterId", null);
+        session.invalidate(); // 세션 무효화
         return "redirect:/";
     }
 
