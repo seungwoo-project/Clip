@@ -10,4 +10,6 @@ public interface QuestionService {
     List<Question> getQuestionsByIds(Long[] questionIds);
 
     void saveAll(List<Question> selectedQuestions);
+
+    void deleteQuestion(Long questionId);
 }

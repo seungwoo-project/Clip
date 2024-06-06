@@ -31,4 +31,9 @@ public class QuestionServiceImpl implements QuestionService {
         questionRepository.saveAll(selectedQuestions);
     }
 
+    @Override
+    public void deleteQuestion(Long questionId) {
+        questionRepository.deleteById(questionId);
+    }
+
 }
