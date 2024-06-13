@@ -152,7 +152,7 @@ public class InterviewController {
 
     // gpt가 만들어주는 면접질문 리스트
     private List<String> generateQuestionsUsingGPT(String text, List<String> allQuestions, int questionCount) {
-        String apiKey = "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";
+        String apiKey = "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";
         OpenAiService service = new OpenAiService(apiKey);
 
         String content;

@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
+
 @Service
 public class CoverLetterServiceImpl implements CoverLetterService{
     private final CoverLetterRepository coverLetterRepository;

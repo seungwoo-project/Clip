@@ -3,6 +3,7 @@ package devdays.AI_InterviewService.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
@@ -20,7 +21,7 @@ public class CoverLetter {
     private String title;
 
     @Column(name = "uploadDate")
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date uploadDate;
 
     @Lob
