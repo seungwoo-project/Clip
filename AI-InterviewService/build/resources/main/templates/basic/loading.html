@@ -79,6 +79,7 @@
         <div class="question-count-container">
             <label for="questionCount" class="question-count-label">AI 질문 개수 설정 : </label>
             <input type="number" id="questionCount" class="question-count-input" min="0" max="10" value="5">
+            <small>(0~10개 생성 가능)</small>
         </div>
         <form th:action="@{/list/{coverLetterId}/loading(coverLetterId=${session.coverLetterId})}" method="post">
             <input type="hidden" id="questionCountInput" name="questionCount">
