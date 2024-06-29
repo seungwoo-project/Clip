@@ -1,172 +1,166 @@
 <!doctype html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en" data-bs-theme="auto">
+<html xmlns:th="http://www.thymeleaf.org" lang="ko" data-bs-theme="light">
 <head>
-    <script src="/docs/5.3/assets/js/color-modes.js"></script>
-
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="Mark Otto, Jacob Thornton, 그리고 Bootstrap 기여자들">
-    <meta name="generator" content="Hugo 0.122.0">
-
-    <title>자소서 목록</title>
-
-    <link rel="canonical" href="https://getbootstrap.kr/docs/5.3/examples/album/">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3">
-
-    <!--    부트스트랩 스타일시트-->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-
+    <title>자소서 목록 - 자소서AI</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        @media (min-width: 768px) {
-            .bd-placeholder-img-lg {
-                font-size: 3.5rem;
-            }
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Noto Sans KR', sans-serif;
         }
-
-        .nav-scroller .nav {
-            display: flex;
-            flex-wrap: nowrap;
-            padding-bottom: 1rem;
-            margin-top: -1px;
-            overflow-x: auto;
-            text-align: center;
-            white-space: nowrap;
-            -webkit-overflow-scrolling: touch;
+        .navbar {
+            background-color: #ffffff;
+            box-shadow: 0 2px 4px rgba(0,0,0,.1);
         }
-
-        .bd-mode-toggle .dropdown-menu .active .bi {
-            display: block !important;
-        }
-
-        .success-message {
-            background-color: #d4edda;
-            border-color: #c3e6cb;
-            color: #155724;
-            padding: 15px;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            opacity: 1;
-            transition: opacity 0.5s ease-in-out;
-        }
-
-        .success-message.hide {
-            opacity: 0;
-        }
-
-        .message-content {
+        .navbar-brand {
+            font-weight: bold;
+            color: #10a37f;
             display: flex;
             align-items: center;
         }
-
-        .message-content i {
-            font-size: 24px;
+        .navbar-brand svg {
             margin-right: 10px;
-            color: #155724;
+        }
+        .user-greeting {
+            font-weight: 500;
+        }
+        .main-content {
+            padding-top: 2rem;
+        }
+        .card {
+            border: none;
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,.12);
+        }
+        .btn-primary {
+            background-color: #10a37f;
+            border-color: #10a37f;
+        }
+        .btn-primary:hover {
+            background-color: #0d8c6d;
+            border-color: #0d8c6d;
+        }
+        .btn-outline-secondary {
+            color: #6c757d;
+            border-color: #6c757d;
+        }
+        .btn-outline-secondary:hover {
+            color: #fff;
+            background-color: #6c757d;
+            border-color: #6c757d;
+        }
+        .success-message {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1050;
+            animation: fadeInOut 5s ease-in-out;
+        }
+        @keyframes fadeInOut {
+            0%, 100% { opacity: 0; }
+            10%, 90% { opacity: 1; }
+        }
+        .file-upload-wrapper {
+            display: inline-block;
+        }
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 2rem;
+        }
+        .action-buttons .btn {
+            padding: 10px 20px;
         }
     </style>
-
-    <script> // 리스트 페이지에서 뒤로가기 못하게 막는 기능
-        history.pushState(null, null, location.href);
-        window.onpopstate = function (event) {
-            history.go(1);
-        };
-    </script>
 </head>
 <body>
-<header>
-    <nav class="navbar navbar-expand-lg navbar-light bg-transparent py-1">
-        <div class="container-fluid">
-                <span class="navbar-text ms-auto">
-                    <span style="font-weight: bold">안녕하세요,</span>
-                    <span th:text="${session.userId}" class="user-id" style="font-weight: bold"></span><span style="font-weight: bold">님</span>
-                </span>
+<nav class="navbar navbar-expand-lg navbar-light">
+    <div class="container">
+        <a class="navbar-brand" href="#">
+            <svg viewBox="0 0 100 100" width="30" height="30" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="50" cy="50" r="45" fill="#10a37f"/>
+                <text x="50" y="50" font-family="Arial" font-size="40" fill="white" text-anchor="middle" dominant-baseline="central">AI</text>
+                <path d="M30 70 Q50 90 70 70" stroke="white" stroke-width="3" fill="none"/>
+            </svg>
+            자소서AI
+        </a>
+        <div class="navbar-text ms-auto user-greeting">
+            안녕하세요, <span th:text="${session.userId}" class="fw-bold"></span>님
         </div>
-    </nav>
-</header>
+    </div>
+</nav>
 
-<main>
+<main class="main-content">
+    <div class="container">
+        <h1 class="text-center mb-4">자소서 목록</h1>
+        <p class="text-center text-muted mb-5">AI 면접을 보고싶은 자소서를 선택하세요.</p>
 
-    <section class="py-5 text-center container">
-        <div class="row py-lg-5">
-            <div class="col-lg-6 col-md-8 mx-auto">
-                <h1 class="fw-light">자소서 목록</h1>
-                <p class="lead text-body-secondary">AI 면접을 보고싶은 자소서를 선택하세요.</p>
-                <!--자소서 파일 처리-->
-                <div style="display: inline-block;">
-                    <form id="fileForm" method="post" enctype="multipart/form-data"  action="/upload" th:action="@{/upload}">
-                        <input type="file" name="coverLetter" id="file" style="display: none;" onchange="submitForm()">
-                        <button type="button" class="btn btn-success my-2" onclick="openFileDialog()">등록하기</button>
-                    </form>
-                </div>
-
-                <a th:href="@{/logout}" class="btn btn-secondary my-2">로그아웃</a>
-                </input>
+        <div class="action-buttons">
+            <div class="file-upload-wrapper">
+                <form id="fileForm" method="post" enctype="multipart/form-data" action="/upload" th:action="@{/upload}">
+                    <input type="file" name="coverLetter" id="file" style="display: none;" onchange="submitForm()">
+                    <button type="button" class="btn btn-primary" onclick="document.getElementById('file').click()">
+                        <i class="fas fa-upload me-2"></i>자소서 등록
+                    </button>
+                </form>
             </div>
+            <a th:href="@{/logout}" class="btn btn-outline-secondary">
+                <i class="fas fa-sign-out-alt me-2"></i>로그아웃
+            </a>
         </div>
-    </section>
 
-    <div class="album py-5 bg-body-tertiary" style="overflow-y: auto; max-height: 60vh;">
-        <div class="container">
-
-            <div class="row row-cols-2 row-cols-sm-2 row-cols-md-1 g-2">
-
-                <div class="col" th:each="coverLetter : ${coverLetters}">
-                    <div class="card shadow-sm">
-                        <div class="card-body">
-                            <p class="card-text" th:text="${coverLetter.title}">자소서 이름</p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div class="btn-group">
-                                    <button type="button" class="btn btn-sm btn-outline-secondary"
-                                            onclick="location.href='상세조회.html'" th:onclick="|location.href='@{/list/{coverLetterId}(coverLetterId = ${coverLetter.coverLetterId})}'|">조회
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+            <div class="col" th:each="coverLetter : ${coverLetters}">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title" th:text="${coverLetter.title}">자소서 제목</h5>
+                        <p class="card-text text-muted" th:text="${#dates.format(coverLetter.uploadDate, 'yyyy-MM-dd HH:mm')}"></p>
+                    </div>
+                    <div class="card-footer bg-transparent border-top-0">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="btn-group">
+                                <a th:href="@{/list/{coverLetterId}(coverLetterId=${coverLetter.coverLetterId})}" class="btn btn-sm btn-outline-secondary">
+                                    <i class="fas fa-eye me-1"></i>조회
+                                </a>
+                                <form th:action="@{/list/{coverLetterId}/delete(coverLetterId=${coverLetter.coverLetterId})}" method="post" style="display: inline;">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">
+                                        <i class="fas fa-trash-alt me-1"></i>삭제
                                     </button>
-                                    <form th:action="@{/list/{coverLetterId}/delete(coverLetterId=${coverLetter.coverLetterId})}" method="post" style="display: inline;">
-                                        <button type="submit" class="btn btn-sm btn-outline-secondary">삭제</button>
-                                    </form>
-                                </div>
-                                <small class="text-body-secondary" th:text="${#dates.format(coverLetter.uploadDate, 'yyyy-MM-dd HH:mm:ss')}"></small>
+                                </form>
                             </div>
+                            <a th:href="@{/list/{coverLetterId}/select(coverLetterId=${coverLetter.coverLetterId})}" class="btn btn-primary">
+                                <i class="fas fa-user-tie me-1"></i>면접보기
+                            </a>
                         </div>
-                        <button type="button" class="btn btn-md btn-outline-secondary"
-                                th:onclick="|location.href='@{/list/{coverLetterId}/select(coverLetterId = ${coverLetter.coverLetterId})}'|">면접보기
-                        </button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
 </main>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-        crossorigin="anonymous"></script>
+<div th:if="${message}" class="success-message alert alert-success" role="alert">
+    <i class="fas fa-check-circle me-2"></i>
+    <span th:text="${message}"></span>
+</div>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    function openFileDialog() {
-        document.getElementById('file').click();
-    }
-
     function submitForm() {
         document.getElementById('fileForm').submit();
     }
-</script>
 
-<!-- 로그인이 완료되었습니다. 기능 구현-->
-<script th:inline="javascript">
-    /*<![CDATA[*/
-    var message = /*[[${message}]]*/ null;
-    if (message) {
-        var successMessage = document.getElementById('successMessage');
-        setTimeout(function() {
-            successMessage.classList.add('hide');
-            setTimeout(function() {
-                successMessage.style.display = 'none';
-            }, 500);
-        }, 1000); // 2초 후에 메시지를 숨김
-    }
-    /*]]>*/
+    history.pushState(null, null, location.href);
+    window.onpopstate = function(event) {
+        history.go(1);
+    };
 </script>
 </body>
 </html>

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>자소서AI - 혁신적인 면접 대비 프로그램</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #f0f4f8;
+            height: 100%;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .logo {
+            margin-bottom: 2rem;
+        }
+        h1 {
+            font-size: 2.5rem;
+            color: #333;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        p {
+            font-size: 1.2rem;
+            color: #666;
+            max-width: 600px;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .cta-button {
+            background-color: #10a37f;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .cta-button:hover {
+            background-color: #0d8c6d;
+        }
+        .feature-list {
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+            max-width: 800px;
+            margin-top: 3rem;
+        }
+        .feature-item {
+            text-align: center;
+            max-width: 200px;
+        }
+        .feature-icon {
+            font-size: 2.5rem;
+            color: #10a37f;
+            margin-bottom: 1rem;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        .animated-text {
+            display: inline-block;  /* 인라인 요소를 블록으로 변경 */
+            animation: pulse 2s infinite;
+            color: #10a37f;  /* 애니메이션 텍스트 색상 변경 */
+            font-weight: bold;  /* 텍스트를 굵게 */
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="logo">
+        <svg viewBox="0 0 100 100" width="80" height="80" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="45" fill="#10a37f"/>
+            <text x="50" y="50" font-family="Arial" font-size="40" fill="white" text-anchor="middle" dominant-baseline="central">AI</text>
+            <path d="M30 70 Q50 90 70 70" stroke="white" stroke-width="3" fill="none"/>
+        </svg>
+    </div>
+    <h1>면접, 이제 AI와 함께 준비하세요</h1>
+    <p>Open AI가 제공하는 <span class="animated-text">자기소개서 맞춤형 질문</span>으로 당신의 면접 실력을 한 단계 끌어올리세요.</p>
+    <button class="cta-button" onclick="location.href='/login'">지금 시작하기</button>
+
+    <div class="feature-list">
+        <div class="feature-item">
+            <div class="feature-icon">💡</div>
+            <p>자소서 맞춤 질문</p>
+        </div>
+        <div class="feature-item">
+            <div class="feature-icon">🎙️</div>
+            <p>AI 음성 인터뷰</p>
+        </div>
+        <div class="feature-item">
+            <div class="feature-icon">🎥</div>
+            <p>면접 영상 기록</p>
+        </div>
+    </div>
+</div>
+</body>
+</html>

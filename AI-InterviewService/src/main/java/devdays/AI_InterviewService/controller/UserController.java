@@ -24,7 +24,7 @@ public class UserController {
     }
 
     // 로그인 폼
-    @GetMapping("/")
+    @GetMapping("/login")
     public String login_form(HttpSession session, Model model) {
         if(session.getAttribute("userId") == null) {
             model.addAttribute("user", new User());
@@ -37,7 +37,7 @@ public class UserController {
     @GetMapping("/logout")
     public String logout(HttpSession session) {
         session.invalidate(); // 세션 무효화
-        return "redirect:/";
+        return "redirect:/login";
     }
 
     // 로그인 판별 여부에 따라 목록으로 갈건지 다시 로그인폼으로 가는 기능 구현
