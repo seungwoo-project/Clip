@@ -1,131 +1,247 @@
-<!doctype html>
-<html xmlns:th="http://www.thymeleaf.org" lang="ko" class="h-100" data-bs-theme="auto">
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
 <head>
-    <script src="/docs/5.3/assets/js/color-modes.js"></script>
-
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="Mark Otto, Jacob Thornton, 그리고 Bootstrap 기여자들">
-    <meta name="generator" content="Hugo 0.122.0">
-    <title>AI-Interview</title>
-
-    <link rel="canonical" href="https://getbootstrap.kr/docs/5.3/examples/cover/">
-
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3">
-
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-
+    <title>AI 면접 진행 중 - 자소서AI</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        .grid-container {
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #0f172a;
+            color: #e2e8f0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+        .main-content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 1rem;
+        }
+        .interview-container {
+            background-color: #1e293b;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        .video-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            height: 70vh;
-            padding: 10px;
-            margin-top: 30px;
-        }
-
-        .button-container {
-            position: absolute;
-            bottom: 20px;
-            right: 20px;
-            display: flex;
             gap: 10px;
+            margin-bottom: 1rem;
         }
-
-        .grid-item {
+        .video-container {
+            position: relative;
+            padding-top: 56.25%; /* 16:9 Aspect Ratio */
+            overflow: hidden;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+        .video-container video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .question-box {
+            background-color: #2d3748;
+            border-left: 5px solid #60a5fa;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 5px;
+            font-size: 1.1rem;
+            color: #e2e8f0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .control-panel {
             display: flex;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
         }
-
-        .btn-danger {
+        .btn-custom {
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            font-weight: 700;
+        }
+        .btn-primary {
+            background-color: #60a5fa;
+            border-color: #60a5fa;
+            color: #1a202c;
+        }
+        .btn-primary:hover {
+            background-color: #3b82f6;
+            border-color: #3b82f6;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(96, 165, 250, 0.3);
+        }
+        #timerButton {
+            font-size: 1.2rem;
+            font-weight: bold;
+            min-width: 100px;
+            background-color: #4a5568;
+            color: #e2e8f0;
+            border: none;
+        }
+        #timerButton.btn-danger {
             animation: blink 1s infinite;
+            background-color: #f56565;
+            color: #fff5f5;
         }
-
         @keyframes blink {
-            0% {
-                opacity: 1;
-            }
-            50% {
-                opacity: 0.5;
-            }
-            100% {
-                opacity: 1;
-            }
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
         }
-
-        #videoElementUser {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
+        .video-label {
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: #fff;
+            padding: 3px 8px;
+            border-radius: 5px;
+            font-size: 0.8rem;
         }
-
-        #videoElementAI {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
+        .footer {
+            background-color: #1a202c;
+            color: #a0aec0;
+            padding: 0.5rem 0;
+            text-align: center;
+            font-size: 0.8rem;
+        }
+        .video-source {
+            font-size: 0.7rem;
+            color: #718096;
+            text-align: right;
+            margin-top: 0.3rem;
+        }
+        @media (max-width: 768px) {
+            .video-grid {
+                grid-template-columns: 1fr;
+            }
+            .question-box {
+                font-size: 1rem;
+            }
+            .btn-custom {
+                padding: 0.4rem 0.8rem;
+                font-size: 0.8rem;
+            }
+            #timerButton {
+                font-size: 1rem;
+                min-width: 80px;
+            }
         }
     </style>
-
-    <!-- Custom styles for this template -->
-    <link href="cover.css" rel="stylesheet">
-
-    <script> // 면접 페이지에서 뒤로가기 못하게 막는 기능
-        history.pushState(null, null, location.href);
-        window.onpopstate = function (event) {
-            history.go(1);
-        };
-    </script>
 </head>
-<body class="d-flex h-100 text-center text-bg-dark">
-
-<div class="container-fluid d-flex w-100 h-100 p-3 mx-auto flex-column">
-    <header class="mb-3">
-        <div>
-            <h3 class="float-md-center mb-0">AI-Interview</h3>
+<body>
+<div class="container-fluid main-content">
+    <div class="interview-container">
+        <h2 class="text-center mb-3" style="color: #60a5fa;">AI 면접 진행 중</h2>
+        <div class="question-box" id="questionElement">
+            [[${session.questions.get(0)}]]
         </div>
-    </header>
-
-    <main class="px-3">
-        <div class="mb-4">
-            <h3 style="margin-top: 10px" id="questionElement">[[${session.questions.get(0)}]]</h3>
-        </div>
-        <div class="grid-container">
-            <div class="grid-item">
+        <div class="video-grid">
+            <div class="video-container">
                 <video loop muted autoplay id="videoElementAI">
                     <source th:src="@{/media/InterviewAI.mp4}" type="video/mp4">
                 </video>
+                <div class="video-label">AI 면접관</div>
             </div>
-            <div class="grid-item">
-                <video autoplay="true" id="videoElementUser">
-
-                </video>
-            </div>
-        </div>
-        <div class="mt-4 text-end">
-            <div class="button-container">
-                <button id="timerButton" class="btn btn-primary me-2">시간 타이머</button>
-                <button id="nextButton" class="btn btn-success" onclick="showNextQuestion()">다음질문</button>
+            <div class="video-container">
+                <video autoplay="true" id="videoElementUser"></video>
+                <div class="video-label">나</div>
             </div>
         </div>
-    </main>
-
-    <footer class="mt-auto text-white-50">
-        <p>© 2024 DevDays</p>
-        <p>Video Source: https://www.youtube.com/watch?v=IFmto-5_oK8</p>
-    </footer>
+        <div class="video-source">
+            AI 면접관 영상 출처: YouTube
+        </div>
+        <div class="control-panel mt-2">
+            <button id="timerButton" class="btn btn-custom">1:30</button>
+            <button id="nextButton" class="btn btn-custom btn-primary" onclick="showNextQuestion()">
+                <i class="fas fa-arrow-right me-1"></i>다음 질문
+            </button>
+        </div>
+    </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-        crossorigin="anonymous"></script>
+<footer class="footer">
+    <div class="container">
+        <p class="mb-0">© 2024 자소서AI. All rights reserved.</p>
+    </div>
+</footer>
 
-<script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script th:inline="javascript">
     let timer = 90;
     let timerInterval;
+    let currentQuestionIndex = -1;
+    const questions = [[${session.questions}]];
+    const nextButton = document.getElementById('nextButton');
+    const coverLetterId = [[${session.coverLetterId}]];
+    let isVoiceLoaded = false;
+
+    function speakQuestion(text) {
+        return new Promise((resolve) => {
+            const utterance = new SpeechSynthesisUtterance(text);
+
+            const voice = speechSynthesis.getVoices().find(voice => voice.name === 'Google 한국의');
+            if (voice) {
+                utterance.voice = voice;
+            }
+
+            utterance.rate = 2;
+            utterance.pitch = 0.9;
+            utterance.volume = 0.8;
+
+            utterance.onend = () => {
+                resolve();
+            };
+
+            window.speechSynthesis.speak(utterance);
+        });
+    }
+
+    async function startInterview() {
+        const introText = "안녕하세요, 면접 대상자님. 오늘 면접에 참여해 주셔서 감사합니다. 이제부터 면접을 시작하도록 하겠습니다. 편안한 마음으로 질문에 답변해 주시기 바랍니다.";
+        document.getElementById('questionElement').textContent = introText;
+        nextButton.disabled = true;
+        await speakQuestion(introText);
+        nextButton.disabled = false;
+        showNextQuestion();
+    }
+
+    async function showNextQuestion() {
+        currentQuestionIndex++;
+        if (currentQuestionIndex < questions.length) {
+            const questionText = questions[currentQuestionIndex];
+            document.getElementById('questionElement').textContent = questionText;
+            resetTimer();
+            nextButton.disabled = true;
+            await speakQuestion(questionText);
+            nextButton.disabled = false;
+            startTimer();
+            if (currentQuestionIndex === questions.length - 1) {
+                nextButton.textContent = '면접 끝내기';
+                nextButton.onclick = function() {
+                    finishInterview();
+                };
+            }
+        }
+    }
+
+    function finishInterview() {
+        window.location.href = '/list/' + coverLetterId + '/interview/finish';
+    }
 
     function startTimer() {
         timerInterval = setInterval(function() {
@@ -165,79 +281,6 @@
         timerElement.classList.add('btn-primary');
     }
 
-    var video = document.querySelector("#videoElementUser");
-
-    if (navigator.mediaDevices.getUserMedia) {
-        navigator.mediaDevices.getUserMedia({ video: true })
-            .then(function (stream) {
-                video.srcObject = stream;
-            })
-            .catch(function (error) {
-                console.log("Something went wrong!");
-            });
-    }
-</script>
-<script th:inline="javascript">
-    let currentQuestionIndex = -1;
-    const questions = [[${session.questions}]];
-    const nextButton = document.getElementById('nextButton');
-    const coverLetterId = [[${session.coverLetterId}]];
-    let isVoiceLoaded = false;
-
-    function speakQuestion(text) {
-        return new Promise((resolve) => {
-            const utterance = new SpeechSynthesisUtterance(text);
-
-            const voice = speechSynthesis.getVoices().find(voice => voice.name === 'Google 한국의');
-            if (voice) {
-                utterance.voice = voice;
-            }
-
-            // utterance.rate = 0.9;
-            utterance.rate = 2;
-            utterance.pitch = 0.9;
-            utterance.volume = 0.8;
-
-            utterance.onend = () => {
-                resolve();
-            };
-
-            window.speechSynthesis.speak(utterance);
-        });
-    }
-
-    async function startInterview() {
-        const introText = "안녕하세요, 면접 대상자님. 오늘 면접에 참여해 주셔서 감사합니다. 이제부터 면접을 시작하도록 하겠습니다. 편안한 마음으로 질문에 답변해 주시기 바랍니다.";
-        document.getElementById('questionElement').textContent = introText;
-        nextButton.disabled = true; // 버튼 비활성화
-        await speakQuestion(introText);
-        nextButton.disabled = false; // 버튼 활성화
-        showNextQuestion();
-    }
-
-    async function showNextQuestion() {
-        currentQuestionIndex++;
-        if (currentQuestionIndex < questions.length) {
-            const questionText = questions[currentQuestionIndex];
-            document.getElementById('questionElement').textContent = questionText;
-            resetTimer();
-            nextButton.disabled = true;
-            await speakQuestion(questionText);
-            nextButton.disabled = false;
-            startTimer();
-            if (currentQuestionIndex === questions.length - 1) {
-                nextButton.textContent = '면접 끝내기';
-                nextButton.onclick = function() {
-                    finishInterview();
-                };
-            }
-        }
-    }
-
-    function finishInterview() {
-        window.location.href = '/list/' + coverLetterId + '/interview/finish';
-    }
-
     function onVoicesLoaded() {
         isVoiceLoaded = true;
         startInterview();
@@ -250,6 +293,19 @@
     if (isVoiceLoaded) {
         startInterview();
     }
+
+    var video = document.querySelector("#videoElementUser");
+
+    if (navigator.mediaDevices.getUserMedia) {
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(function (stream) {
+                video.srcObject = stream;
+            })
+            .catch(function (error) {
+                console.log("Something went wrong!");
+            });
+    }
+
 </script>
 </body>
 </html>
