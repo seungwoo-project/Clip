@@ -47,13 +47,16 @@ public class UserController {
         if (session.getAttribute("userId") == null) {
             boolean loginSuccess = userService.login(user.getUserId(), user.getPassword());
 
-            if (loginSuccess) {
-                session.setAttribute("userId", user.getUserId());
-                return "redirect:/list";
-            } else {
+            // 로그인 실패 처리
+            if(!loginSuccess) {
                 model.addAttribute("errorMessage", "아이디 또는 비밀번호를 잘못 입력했습니다.");
                 return "basic/login";
             }
+
+            // 로그인 성공 처리
+            session.setAttribute("userId", user.getUserId());
+            return "redirect:/list";
+
         } else {
             return "redirect:/list";
         }
