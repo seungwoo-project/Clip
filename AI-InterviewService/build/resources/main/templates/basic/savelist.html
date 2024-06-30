@@ -1,35 +1,131 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI 면접 질문 추가하기</title>
+    <title>면접 질문 저장 - 자소서AI</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         body {
-            background-color: #f0f0f0;
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #f8f9fa;
         }
-        .content {
-            max-width: 1000px;
-            margin: 20px auto;
-            padding: 20px;
-            background-color: #fff;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            border-radius: 5px;
+        .navbar {
+            background-color: #ffffff;
+            box-shadow: 0 2px 4px rgba(0,0,0,.1);
+        }
+        .navbar-brand {
+            font-weight: bold;
+            color: #10a37f;
+            display: flex;
+            align-items: center;
+        }
+        .navbar-brand svg {
+            margin-right: 10px;
+        }
+        .main-content {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background-color: #ffffff;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        h2 {
+            color: #10a37f;
+            margin-bottom: 20px;
+            font-weight: 700;
+            text-align: center;
         }
         .clickable-row {
             cursor: pointer;
+            transition: background-color 0.3s ease;
         }
         .clickable-row:hover {
-            background-color: #f5f5f5;
+            background-color: #e6f3f0;
+        }
+        .btn-success {
+            background-color: #10a37f;
+            border-color: #10a37f;
+        }
+        .btn-success:hover {
+            background-color: #0d8c6d;
+            border-color: #0d8c6d;
+        }
+        .info-toggle {
+            cursor: pointer;
+            color: #10a37f;
+            text-decoration: underline;
+            margin-bottom: 10px;
+            display: inline-block;
+        }
+        .info-box {
+            display: none;
+            background-color: #e6f3f0;
+            border-left: 5px solid #10a37f;
+            padding: 15px;
+            margin-bottom: 30px;
+            border-radius: 5px;
+            transition: all 0.3s ease-in-out;
+        }
+        .info-box.show {
+            display: block;
+        }
+        .table {
+            color: #333;
+        }
+        .table thead th {
+            background-color: #e6f3f0;
+            color: #10a37f;
+            font-weight: 600;
         }
     </style>
 </head>
 <body>
-<div class="content">
-    <h2 class="text-center mb-4">저장 할 질문을 선택해주세요.</h2>
+<nav class="navbar navbar-expand-lg navbar-light">
+    <div class="container">
+        <a class="navbar-brand" href="#">
+            <svg viewBox="0 0 100 100" width="30" height="30" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="50" cy="50" r="45" fill="#10a37f"/>
+                <text x="50" y="50" font-family="Arial" font-size="40" fill="white" text-anchor="middle" dominant-baseline="central">AI</text>
+                <path d="M30 70 Q50 90 70 70" stroke="white" stroke-width="3" fill="none"/>
+            </svg>
+            자소서AI
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="#"><i class="fas fa-user me-1"></i>마이페이지</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#"><i class="fas fa-sign-out-alt me-1"></i>로그아웃</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container main-content">
+    <h2>면접 질문 저장하기</h2>
+    <span class="info-toggle" id="infoToggle">
+        <i class="fas fa-info-circle me-2"></i>이 페이지가 무엇인가요?
+    </span>
+    <div class="info-box" id="infoBox">
+        <h5>면접 질문 저장 페이지 안내</h5>
+        <p>이 페이지는 방금 진행한 AI 면접에서 사용된 질문들을 보여줍니다. 여기서 원하는 질문을 선택하여 저장할 수 있습니다.</p>
+        <ul>
+            <li>저장한 질문은 다음 면접에서 재사용될 수 있습니다.</li>
+            <li>이를 통해 일관성 있는 면접 준비가 가능합니다.</li>
+            <li>중요하다고 생각되는 질문들을 선별하여 저장하세요.</li>
+        </ul>
+    </div>
     <form th:action="@{/list/{coverLetterId}/interview/save(coverLetterId = ${session.coverLetterId})}" method="post">
-        <table class="table table-striped table-hover">
+        <table class="table table-hover">
             <thead>
             <tr>
                 <th style="width: 10%;">선택</th>
@@ -48,10 +144,13 @@
             </tbody>
         </table>
         <div class="d-flex justify-content-end mt-4">
-            <button type="submit" class="btn btn-success">저장하기</button>
+            <button type="submit" class="btn btn-success">
+                <i class="fas fa-save me-2"></i>선택한 질문 저장하기
+            </button>
         </div>
     </form>
 </div>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
     const rows = document.querySelectorAll('.clickable-row');
@@ -63,6 +162,11 @@
                 checkbox.checked = !checkbox.checked;
             }
         });
+    });
+
+    document.getElementById('infoToggle').addEventListener('click', function() {
+        const infoBox = document.getElementById('infoBox');
+        infoBox.classList.toggle('show');
     });
 </script>
 </body>
