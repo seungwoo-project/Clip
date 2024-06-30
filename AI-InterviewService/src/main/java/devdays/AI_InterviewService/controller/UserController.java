@@ -42,13 +42,7 @@ public class UserController {
 
     // 로그인 판별 여부에 따라 목록으로 갈건지 다시 로그인폼으로 가는 기능 구현
     @PostMapping("/login")
-    public String login(@Validated @ModelAttribute User user, BindingResult bindingResult, Model model, HttpSession session) {
-
-        // 검증 실패
-        if(bindingResult.hasErrors()) {
-            log.info("검증 오류 발생 = {}", bindingResult);
-            return "basic/login";
-        }
+    public String login(@ModelAttribute User user, Model model, HttpSession session) {
 
         if (session.getAttribute("userId") == null) {
             boolean loginSuccess = userService.login(user.getUserId(), user.getPassword());
