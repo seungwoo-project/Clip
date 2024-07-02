@@ -28,7 +28,7 @@
 
 1. **회원 관리**
    - 회원가입 및 로그인 기능
-   - 사용자 인증 및 권한 관리
+   - 유효성 검증 기능
 
 2. **자기소개서 관리**
    - 자기소개서 등록, 조회, 수정, 삭제
@@ -50,7 +50,35 @@
 ## 시스템 아키텍처
 
 ```
-[이 부분에 시스템 아키텍처 다이어그램 추가]
+[Client]
+    ↕ HTTP
+[Spring Boot Application]
+    |
+    ├─ [Controllers]
+    |   ├─ UserController
+    |   ├─ InterviewController
+    |   └─ InterviewReadyController
+    |
+    ├─ [Services]
+    |   ├─ UserService
+    |   ├─ CoverLetterService
+    |   └─ QuestionService
+    |
+    ├─ [Repositories]
+    |   ├─ UserRepository
+    |   ├─ CoverLetterRepository
+    |   └─ QuestionRepository
+    |
+    └─ [Entities]
+        ├─ User
+        ├─ CoverLetter
+        └─ Question
+
+[Database (H2 or other)]
+
+[External Services]
+    ↕ API
+[OpenAI API]
 ```
 
 ## 데이터베이스 설계
