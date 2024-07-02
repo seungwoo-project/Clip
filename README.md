@@ -87,6 +87,47 @@
 ![스크린샷 2024-06-15 오전 1 36 36](https://github.com/seungwoo-project/AI-Interview-Coach/assets/112483124/69ab60ba-f716-4803-8e8f-985cadbf3f72)
 
 
+## AI 면접 도우미 API 명세
+
+### 자기소개서 관련 API
+
+| 기능 | Method | URL | 설명 |
+|------|:------:|-----|------|
+| 목록 조회 | GET | `/list` | 자기소개서 목록 페이지 반환 |
+| 상세 조회 | GET | `/list/{coverLetterId}` | 특정 자기소개서 상세 페이지 반환 |
+| 업로드 | POST | `/upload` | 자기소개서 파일 업로드 후 목록으로 리다이렉트 |
+| 삭제 | POST | `/list/{coverLetterId}/delete` | 특정 자기소개서 삭제 후 목록으로 리다이렉트 |
+
+### 면접 질문 관련 API
+
+| 기능 | Method | URL | 설명 |
+|------|:------:|-----|------|
+| 질문 선택 | GET | `/list/{coverLetterId}/select` | 질문 선택 페이지 반환 |
+| 질문 삭제 | GET | `/list/{questionId}/select/delete` | 특정 질문 삭제 후 선택 페이지로 리다이렉트 |
+| 선택 질문 저장 | POST | `/list/{coverLetterId}/select` | 선택된 질문을 세션에 저장 |
+| 사용자 정의 질문 추가 | POST | `/list/{coverLetterId}/userSelect` | 사용자 정의 질문을 세션에 저장 (AJAX) |
+
+### 면접 진행 관련 API
+
+| 기능 | Method | URL | 설명 |
+|------|:------:|-----|------|
+| 로딩 화면 | GET | `/list/{coverLetterId}/loading` | 면접 준비 로딩 페이지 반환 |
+| 면접 시작 | POST | `/list/{coverLetterId}/loading` | 면접 질문 생성 및 면접 페이지로 리다이렉트 |
+| 면접 화면 | GET | `/list/{coverLetterId}/interview` | 면접 진행 메인 페이지 반환 |
+| 면접 종료 | GET | `/list/{coverLetterId}/interview/finish` | 면접 종료 페이지 반환 |
+| 질문 저장 목록 | GET | `/list/{coverLetterId}/interview/save` | 저장할 질문 목록 페이지 반환 |
+| 선택 질문 저장 | POST | `/list/{coverLetterId}/interview/save` | 선택된 질문을 DB에 저장 후 목록으로 리다이렉트 |
+
+### 사용자 관리 API
+
+| 기능 | Method | URL | 설명 |
+|------|:------:|-----|------|
+| 로그인 폼 | GET | `/login` | 로그인 페이지 반환 |
+| 로그인 처리 | POST | `/login` | 로그인 처리 후 성공 시 목록, 실패 시 로그인 페이지 반환 |
+| 로그아웃 | GET | `/logout` | 세션 종료 후 로그인 페이지로 리다이렉트 |
+| 회원가입 폼 | GET | `/register` | 회원가입 페이지 반환 |
+| 회원가입 처리 | POST | `/register` | 회원가입 처리 후 성공 시 홈, 실패 시 회원가입 페이지 반환 |
+
 ## 화면 구성
 
 1. 로그인 화면
