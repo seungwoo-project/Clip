@@ -83,10 +83,9 @@
 
 ## 데이터베이스 설계
 
-```
+
 ![스크린샷 2024-06-15 오전 1 36 36](https://github.com/seungwoo-project/AI-Interview-Coach/assets/112483124/69ab60ba-f716-4803-8e8f-985cadbf3f72)
 
-```
 
 ## 화면 구성
 
