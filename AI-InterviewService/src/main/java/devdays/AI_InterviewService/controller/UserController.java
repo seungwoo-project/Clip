@@ -44,6 +44,7 @@ public class UserController {
     @PostMapping("/login")
     public String login(@ModelAttribute User user, Model model, HttpSession session) {
 
+        // 세션아이디가 설정이 안되어있을 때
         if (session.getAttribute("userId") == null) {
             boolean loginSuccess = userService.login(user.getUserId(), user.getPassword());
 
@@ -57,7 +58,14 @@ public class UserController {
             session.setAttribute("userId", user.getUserId());
             return "redirect:/list";
 
-        } else {
+        } else { // 세션아이디가 설정 되어 있을 때
+
+            // 로그인 아이디와 세션아이디와 비교
+            log.info("현재 session ID : {}", session.getAttribute("userId"));
+            // 세션 아이디와 로그인 한 아이디가 다르다면 갱신해주기
+            if(!user.getUserId().equals(session.getAttribute("userId"))) {
+                session.setAttribute("userId", user.getUserId());
+            }
             return "redirect:/list";
         }
     }
@@ -91,7 +99,7 @@ public class UserController {
 
         try {
             userService.signup(user);
-            return "redirect:/";
+            return "redirect:/login";
         } catch (IllegalArgumentException e) {
             model.addAttribute("errorMessage", e.getMessage());
             return "basic/register";

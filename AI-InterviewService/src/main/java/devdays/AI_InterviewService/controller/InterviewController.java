@@ -155,6 +155,7 @@ public class InterviewController {
         String apiKey = "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";
         OpenAiService service = new OpenAiService(apiKey);
 
+
         String content;
         String questionsText = String.join("\n", allQuestions);
 
@@ -192,7 +193,7 @@ public class InterviewController {
             }
 
             // 요청 간격 조절
-            Thread.sleep(2000);
+            Thread.sleep(1000);
         } catch (Exception e) {
             // Handle exceptions
             e.printStackTrace();
