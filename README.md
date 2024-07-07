@@ -138,25 +138,6 @@
 6. AI 면접 진행 화면
 7. 면접 결과 및 다시보기 화면
 
-## 프로젝트 실행 방법
-
-1. 저장소 클론
-   ```
-   git clone https://github.com/seungwoo-project/AIInterview-Coach.git
-   ```
-2. 프로젝트 디렉토리로 이동
-   ```
-   cd AIInterview-Coach
-   ```
-3. 의존성 설치
-   ```
-   ./gradlew build
-   ```
-4. 애플리케이션 실행
-   ```
-   ./gradlew bootRun
-   ```
-
 ## 개발 후기
 
 - Spring, JPA, Thymeleaf 등의 기술을 실제 프로젝트에 적용하며 실력 향상
@@ -168,11 +149,3 @@
 ## 라이센스
 
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
-
-## 기여 방법
-
-1. 이 저장소를 포크합니다.
-2. 새 브랜치를 생성합니다 (`git checkout -b feature/AmazingFeature`)
-3. 변경 사항을 커밋합니다 (`git commit -m 'Add some AmazingFeature'`)
-4. 브랜치에 푸시합니다 (`git push origin feature/AmazingFeature`)
-5. Pull Request를 생성합니다.
