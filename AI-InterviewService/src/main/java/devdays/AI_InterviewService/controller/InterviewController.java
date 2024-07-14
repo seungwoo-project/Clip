@@ -127,7 +127,10 @@ public class InterviewController {
 
         if(userQuestions != null) saveQuestions.addAll(userQuestions);
         if(gptQuestions != null) saveQuestions.addAll(gptQuestions);
-
+        log.info("저장 되는 질문 리스트:");
+        for (String question : saveQuestions) {
+            log.info(question);
+        }
         model.addAttribute("saveQuestions", saveQuestions);
         return "basic/savelist";
     }
