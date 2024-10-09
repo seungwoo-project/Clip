@@ -176,14 +176,17 @@ public class InterviewController {
         if (allQuestions != null && !allQuestions.isEmpty()) {
             // allQuestions에 질문이 있는 경우
             content = "gpt, 지금부터 당신은 개발자 면접관 역할을 합니다. " +
-                    "제가 제공하는 자기소개서를 읽고, 기존 질문들을 제외한 나머지 내용에 기반하여 새로운 면접 질문 " + questionCount + "개를 Q1. 이런 식으로 한국어로 작성해 주세요.\n\n" +
+                    "제가 제공하는 자기소개서를 읽고, 기존 질문들을 제외한 나머지 내용에 기반하여 새로운 면접 질문 " + questionCount + "개를 Q1. 이런 식으로 작성해 주세요.\n\n" +
                     "기존 질문들:\n" + questionsText + "\n\n" +
-                    "자기소개서 내용:\n" + text + "\n\n";
+                    "자기소개서 내용:\n" + text + "\n\n" +
+                    "자기소개서가 한국어이면 한국어로 답변해주시고, 영문 자기소개서이면 영어로 답변해주세요.";
         } else {
             // allQuestions에 질문이 없는 경우
             content = "gpt, 지금부터 당신은 개발자 면접관 역할을 합니다. " +
-                    "제가 제공하는 자기소개서를 읽고, 내용에 기반하여 면접 질문 " + questionCount + "개를 Q1. 이런 식으로 한국어로 작성해 주세요.\n\n" +
-                    "자기소개서 내용:\n" + text + "\n\n";
+                    "제가 제공하는 자기소개서를 읽고, 기존 질문들을 제외한 나머지 내용에 기반하여 새로운 면접 질문 " + questionCount + "개를 Q1. 이런 식으로 작성해 주세요.\n\n" +
+                    "기존 질문들:\n" + questionsText + "\n\n" +
+                    "자기소개서 내용:\n" + text + "\n\n" +
+                    "자기소개서가 한국어이면 한국어로 답변해주시고, 영문 자기소개서이면 영어로 답변해주세요.";
         }
 
         ChatCompletionRequest chatCompletionRequest = ChatCompletionRequest.builder()
