@@ -191,7 +191,7 @@
 
             checkboxCell.innerHTML = `
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="question${questionCount}" name="selectedQuestions" value="${question}" onclick="event.stopPropagation()">
+                    <input class="form-check-input" type="checkbox" id="question${questionCount}" name="selectedQuestions" value="${question}" onclick="event.stopPropagation()" checked>
                 </div>
             `;
             questionCell.innerText = question;
