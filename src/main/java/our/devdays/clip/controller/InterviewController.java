@@ -131,7 +131,7 @@ public class InterviewController {
 
         if(userQuestions != null) saveQuestions.addAll(userQuestions);
         if(gptQuestions != null) saveQuestions.addAll(gptQuestions);
-        log.info("저장 되는 질문 리스트:");
+        log.info("사용자추가질문과 gpt 질문 리스트:");
         for (String question : saveQuestions) {
             log.info(question);
         }
@@ -143,7 +143,7 @@ public class InterviewController {
     // 체크박스에 선택된 질문들을 questions 데이터베이스에 삽입하는 기능
     @PostMapping("/list/{coverLetterId}/interview/save")
     public String saveSelectedQuestions(@RequestParam(value = "selectedQuestions", required = false) List<String> selectedQuestions, HttpSession session) {
-
+        log.info("선택된 저장하려는 질문들 : {}", selectedQuestions);
         if(selectedQuestions != null && !selectedQuestions.isEmpty()) {
             String userId = (String) session.getAttribute("userId");
 
